@@ -86,7 +86,7 @@ void Matrix::clear() {
 	return;
 }
 bool Matrix::get(unsigned int row, unsigned int col, double& num) const {
-	if (row < num_rows() && col < num_cols()) {
+	if (!(row < num_rows() && col < num_cols())) {
 		return false;
 	}
 	num = data[row][col];
