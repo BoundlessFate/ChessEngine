@@ -93,7 +93,7 @@ bool Matrix::get(unsigned int row, unsigned int col, double& num) const {
 	return true;
 }
 bool Matrix::set(unsigned int row, unsigned int col, double num) {
-	if (row < num_rows() && col < num_cols()) {
+	if (!(row < num_rows() && col < num_cols())) {
 		return false;
 	}
 	data[row][col] = num;
