@@ -40,11 +40,13 @@ Matrix::Matrix(unsigned int row, unsigned int col, double fill) {
 	}
 }
 Matrix::~Matrix() {
-	if (data != NULL) {
-		for (int i=0; i<numRows; i++) {
-			delete[] data[i];
+	if (num_rows() != 0 && num_cols() != 0) {
+		for (unsigned int i=0; i<num_rows(); i++) {
+			if (data[i] != nullptr) {
+				delete[] data[i];
+			}
 		}
-		delete data;
+		delete[] data;
 	}
 }
 bool Matrix::operator== (const Matrix& a) {
@@ -192,7 +194,12 @@ double* Matrix::get_row(unsigned int row) {
 	if (!(row < num_rows())) {
 		return requestedRow;
 	}
-	requestedRow = data[row];
+	requestedRow = new double[num_rows()];
+	for (unsigned int i=0; i<num_cols(); i++) {
+		double tempVal;
+		get(row, i, tempVal);
+		requestedRow[i] = tempVal;
+	}
 	return requestedRow;
 }
 double* Matrix::get_col(unsigned int col) {
@@ -200,8 +207,7 @@ double* Matrix::get_col(unsigned int col) {
 		double* nullPointer = NULL;
 		return nullPointer;
 	}
-	double colArray[num_cols()];
-	double* requestedCol = colArray;
+	double* requestedCol = new double[num_cols()];
 	for (unsigned int i=0; i<num_rows(); i++) {
 		double tempVal;
 		get(i, col, tempVal);
@@ -271,7 +277,7 @@ std::ostream& operator<< (std::ostream& out, const Matrix& m) {
 			}
 		}
 		if (i < m.num_rows() - 1) {
-			out << std::endl;
+			out << std::endl << "  ";
 		}
 	}
 	if (m.num_cols() != 0) {
