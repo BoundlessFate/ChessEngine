@@ -1,0 +1,63 @@
+Team Name                 Home_W   Home_L   Home_T   Home_Win%   Homefield Advantage
+New_Hampshire                  1        0        0        1.00                  2.00
+St._Cloud_State                2        1        0        0.67                  2.00
+Connecticut                    0        0        1        0.50                  2.00
+Colorado_College               2        1        0        0.67                  1.67
+American_International         1        1        0        0.50                  1.50
+Canisius                       0        0        2        0.50                  1.50
+Colgate                       13        6        0        0.68                  1.49
+Boston_University              3        0        1        0.88                  1.40
+Harvard                        7        7        2        0.50                  1.38
+Vermont                        3        0        0        1.00                  1.33
+RIT                            0        0        1        0.50                  1.33
+Rensselaer                    14        4        2        0.75                  1.33
+Dartmouth                     14        5        2        0.71                  1.32
+UMass_Lowell                   1        0        0        1.00                  1.25
+Brown                         11        4        5        0.68                  1.25
+Union                         11        3        2        0.75                  1.22
+Boston_College                 1        0        1        0.75                  1.20
+Yale                          12        4        1        0.74                  1.14
+Cornell                        7        5        3        0.57                  1.13
+St._Lawrence                  10        7        2        0.58                  1.08
+Lake_Superior                  2        0        0        1.00                  1.00
+Miami                          2        0        0        1.00                  1.00
+Denver                         2        1        0        0.67                  1.00
+Merrimack                      0        0        2        0.50                  1.00
+Western_Michigan               1        1        0        0.50                  1.00
+Princeton                      6       10        0        0.38                  0.99
+Clarkson                       4       11        3        0.31                  0.90
+Minnesota_State                1        0        1        0.75                  0.90
+Quinnipiac                    20       13        4        0.59                  0.80
+Massachusetts                  0        2        1        0.17                  0.56
+Holy_Cross                     1        2        0        0.33                  0.50
+Acadia                         0        0        0        0.00                  0.00
+Alabama-Huntsville             0        0        0        0.00                  0.00
+Army                           0        0        0        0.00                  0.00
+Bentley                        0        0        0        0.00                  0.00
+Bowling_Green                  0        2        0        0.00                  0.00
+Brock                          0        0        0        0.00                  0.00
+Carleton                       0        0        0        0.00                  0.00
+Ferris_State                   0        0        0        0.00                  0.00
+Guelph                         0        0        0        0.00                  0.00
+Maine                          0        3        0        0.00                  0.00
+McGill                         0        0        0        0.00                  0.00
+Mercyhurst                     0        0        0        0.00                  0.00
+Michigan                       0        0        0        0.00                  0.00
+Minnesota                      0        0        0        0.00                  0.00
+Nebraska_Omaha                 0        0        0        0.00                  0.00
+Niagara                        0        0        0        0.00                  0.00
+North_Dakota                   0        0        0        0.00                  0.00
+Northeastern                   0        1        0        0.00                  0.00
+Norwich                        0        0        0        0.00                  0.00
+Ohio_State                     0        0        0        0.00                  0.00
+Penn_State                     0        0        0        0.00                  0.00
+Providence                     0        1        0        0.00                  0.00
+Queen's                        0        0        0        0.00                  0.00
+Robert_Morris                  0        0        0        0.00                  0.00
+Russian_Red_Stars              0        0        0        0.00                  0.00
+Sacred_Heart                   0        1        0        0.00                  0.00
+USA_Under-18_Team              0        0        0        0.00                  0.00
+------------------------------------------------------------------------------------
+The Team With The Best Homefield Advantage is New Hampshire.
+The Homefield MVP For New Hampshire Is Eric Knodel!
+Eric Knodel Scored 1 Goals And 0 Assists At Home With Only 0 Penalty/Penalties!
