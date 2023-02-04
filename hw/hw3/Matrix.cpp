@@ -202,8 +202,7 @@ double* Matrix::get_col(unsigned int col) {
 	return requestedCol;
 }
 Matrix* Matrix::quarter() {
-	Matrix matrixArray[4];
-	Matrix* matrixPointer = matrixArray;
+	Matrix* matrixPointer = new Matrix[4];
 	if (num_rows() == 0 || num_cols() == 0) {
 		for (unsigned int i=0; i<4; i++) {
 			matrixPointer[i] = Matrix();
@@ -224,29 +223,29 @@ Matrix* Matrix::quarter() {
 			}
 		} else if (i == 1) {
 			for (unsigned int j=0; j<rowNum; j++) {
-				for (unsigned int k=colNum - 1; k<num_cols(); k++) {
+				for (unsigned int k=int(double(num_cols()) /2); k<num_cols(); k++) {
 					double currentVal;
 					get(j, k, currentVal);
-					matrixPointer[i].set(j, k, currentVal);
+					matrixPointer[i].set(j, k-colNum, currentVal);
 				}
 			}
 		} else if (i == 2) {
-			for (unsigned int j=rowNum - 1; j<num_rows(); j++) {
+			for (unsigned int j=int(double(num_rows()) /2); j<num_rows(); j++) {
 				for (unsigned int k=0; k<colNum; k++) {
 					double currentVal;
 					get(j, k, currentVal);
-					matrixPointer[i].set(j, k, currentVal);
+					matrixPointer[i].set(j-int(double(num_rows()) /2), k, currentVal);
 				}
 			}
 		} else if (i == 3) {
-			for (unsigned int j=rowNum - 1; j<num_rows(); j++) {
-				for (unsigned int k=colNum - 1; k<num_cols(); k++) {
+			for (unsigned int j=int(double(num_rows()) /2); j<num_rows(); j++) {
+				for (unsigned int k=int(double(num_cols()) /2); k<num_cols(); k++) {
 					double currentVal;
 					get(j, k, currentVal);
-					matrixPointer[i].set(j, k, currentVal);
+					matrixPointer[i].set(j-int(double(num_rows()) /2), k-int(double(num_cols()) /2), currentVal);
 				}
 			}
-		}
+		}	
 	}
 	return matrixPointer;
 }
@@ -258,7 +257,7 @@ std::ostream& operator<< (std::ostream& out, const Matrix& m) {
 		for (unsigned int j=0; j<m.num_cols(); j++) {
 			double tempNum;
 			m.get(i, j, tempNum);
-			out << std::fixed << std::setprecision(2) << tempNum;
+			out << tempNum;
 			if (j < m.num_cols() - 1) {
 				out << " ";
 			}
@@ -273,3 +272,4 @@ std::ostream& operator<< (std::ostream& out, const Matrix& m) {
 	out << "]" << std::endl;
 	return out;
 }
+
