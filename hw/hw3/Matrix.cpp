@@ -39,6 +39,14 @@ Matrix::Matrix(unsigned int row, unsigned int col, double fill) {
 		}
 	}
 }
+Matrix::~Matrix() {
+	if (data != NULL) {
+		for (int i=0; i<numRows; i++) {
+			delete[] data[i];
+		}
+		delete data;
+	}
+}
 bool Matrix::operator== (const Matrix& a) {
 	if (a.num_rows() != num_rows() || a.num_cols() != num_cols()) {
 		return false;

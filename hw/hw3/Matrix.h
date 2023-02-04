@@ -4,6 +4,7 @@ public:
 	Matrix();
 	Matrix(const Matrix& a);
 	Matrix(unsigned int row, unsigned int col, double fill);
+	~Matrix();
 	bool operator== (const Matrix& a);
 	bool operator!= (const Matrix& a);
 	void operator= (const Matrix& a);
