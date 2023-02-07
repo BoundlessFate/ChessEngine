@@ -1,47 +1,40 @@
 #include "Matrix.h"
 #include <iomanip>
 #include <math.h>
+#include <algorithm>
 Matrix::Matrix() {
 	numRows = 0;
 	numCols = 0;
 }
 Matrix::Matrix(const Matrix& a) {
-	if (a.num_rows() == 0 || a.num_cols() == 0) {
-		numRows = 0;
-		numCols = 0;
-	} else {
-		numRows = a.num_rows();
-		numCols = a.num_cols();
-		data = new double*[num_rows()];
-		for (unsigned int i=0; i<num_rows(); i++) {
-			data[i] = new double[num_cols()];
-			for (unsigned int j=0; j<num_cols(); j++) {
-				double tempNum;
-				a.get(i, j, tempNum);
-				set(i, j, tempNum);
-			}
+	numRows = a.num_rows();
+	numCols = a.num_cols();
+	data = new double*[numRows];
+	for (unsigned int i=0; i<numRows; i++) {
+		data[i] = new double[numCols];
+		for (unsigned int j=0; j<numCols; j++) {
+			data[i][j] = a.data[i][j];
 		}
 	}
 }
 Matrix::Matrix(unsigned int row, unsigned int col, double fill) {
-	if (row == 0 || col == 0) {
-		numRows = 0;
-		numCols = 0;
+	numRows = row;
+	numCols = col;
+	data = new double*[row];
+	if (fill != 0) {
+		for (unsigned int i=0; i<row; i++) {
+			data[i] = new double[col];
+			std::fill_n(data[i], col, fill);
+		}
 	} else {
-		numRows = row;
-		numCols = col;
-		data = new double*[num_rows()];
-		for (unsigned int i=0; i<num_rows(); i++) {
-			data[i] = new double[num_cols()];
-			for (unsigned int j=0; j<num_cols(); j++) {
-				set(i, j, fill);
-			}
+		for (unsigned int i=0; i<row; i++) {
+			data[i] = new double[col] {};
 		}
 	}
 }
 Matrix::~Matrix() {
-	if (num_rows() != 0 && num_cols() != 0) {
-		for (unsigned int i=0; i<num_rows(); i++) {
+	if (numRows != 0 && numCols != 0) {
+		for (unsigned int i=0; i<numRows; i++) {
 			if (data[i] != nullptr) {
 				delete[] data[i];
 			}
@@ -50,14 +43,13 @@ Matrix::~Matrix() {
 	}
 }
 bool Matrix::operator== (const Matrix& a) {
-	if (a.num_rows() != num_rows() || a.num_cols() != num_cols()) {
+	if (a.num_rows() != numRows || a.num_cols() != numCols) {
 		return false;
 	}
 	for (unsigned int i=0; i<num_rows(); i++) {
 		for (unsigned int j=0; j<num_cols(); j++) {
-			double currentVal;
+			double currentVal = data[i][j];
 			double otherVal;
-			get(i, j, currentVal);
 			a.get(i, j, otherVal);
 			if (currentVal != otherVal) {
 				return false;
@@ -67,14 +59,13 @@ bool Matrix::operator== (const Matrix& a) {
 	return true;
 }
 bool Matrix::operator!= (const Matrix& a) {
-	if (a.num_rows() != num_rows() || a.num_cols() != num_cols()) {
+	if (a.num_rows() != numRows || a.num_cols() != numCols) {
 		return true;
 	}
-	for (unsigned int i=0; i<num_rows(); i++) {
-		for (unsigned int j=0; j<num_cols(); j++) {
-			double currentVal;
+	for (unsigned int i=0; i<numRows; i++) {
+		for (unsigned int j=0; j<numRows; j++) {
+			double currentVal = data[i][j];
 			double otherVal;
-			get(i, j, currentVal);
 			a.get(i, j, otherVal);
 			if (currentVal != otherVal) {
 				return true;
@@ -84,10 +75,10 @@ bool Matrix::operator!= (const Matrix& a) {
 	return false;
 }
 void Matrix::clear() {
-	if (num_rows() == 0 || num_cols() == 0) {
+	if (numRows == 0 || numCols == 0) {
 		return;
 	}
-	for (unsigned int i=0; i<num_rows(); i++) {
+	for (unsigned int i=0; i<numRows; i++) {
 		delete[] data[i];
 	}
 	delete[] data;
@@ -96,30 +87,28 @@ void Matrix::clear() {
 	return;
 }
 bool Matrix::get(unsigned int row, unsigned int col, double& num) const {
-	if (!(row < num_rows() && col < num_cols())) {
+	if ((row > numRows) || (col > numCols)) {
 		return false;
 	}
 	num = data[row][col];
 	return true;
 }
 bool Matrix::set(unsigned int row, unsigned int col, double num) {
-	if (!(row < num_rows() && col < num_cols())) {
+	if (row > numRows || col > numCols) {
 		return false;
 	}
 	data[row][col] = num;
 	return true;
 }
 void Matrix::multiply_by_coefficient(double coefficient) {
-	for (unsigned int i=0; i<num_rows(); i++) {
-		for (unsigned int j=0; j<num_cols(); j++) {
-			double currentVal;
-			get(i, j, currentVal);
-			set(i, j, currentVal * coefficient);
+	for (unsigned int i=0; i<numRows; i++) {
+		for (unsigned int j=0; j<numCols; j++) {
+			data[i][j] = data[i][j] * coefficient;
 		}
 	}
 }
 bool Matrix::swap_row(unsigned int numOne, unsigned int numTwo) {
-	if (!(numOne < num_rows() && numTwo < num_cols())) {
+	if ((numOne > numRows) || (numTwo > numCols)) {
 		return false;
 	}
 	double* tempRow = data[numOne];
@@ -128,90 +117,77 @@ bool Matrix::swap_row(unsigned int numOne, unsigned int numTwo) {
 	return true;
 }
 void Matrix::transpose() {
-	double** newMatrix = new double*[num_cols()];
-	for (unsigned int i=0; i<num_cols(); i++) {
-		newMatrix[i] = new double[num_rows()];
-		for (unsigned int j=0; j<num_rows(); j++) {
-			double tempNum;
-			get(j, i, tempNum);
-			newMatrix[i][j] = tempNum;
+	double** newMatrix = new double*[numCols];
+	for (unsigned int i=0; i<numCols; i++) {
+		newMatrix[i] = new double[numRows];
+		for (unsigned int j=0; j<numRows; j++) {
+			newMatrix[i][j] = data[j][i];
 		}
 	}
 	clear();
 	data = newMatrix;
 }
 bool Matrix::add(const Matrix& matrixB) {
-	if (num_rows() != matrixB.num_rows() || num_cols() != matrixB.num_cols()) {
+	if (numRows != matrixB.num_rows() || numCols != matrixB.num_cols()) {
 		return false;
 	}
-	for (unsigned int i=0; i<num_rows(); i++) {
-		for (unsigned int j=0; j<num_cols(); j++) {
-			double currentValue;
+	for (unsigned int i=0; i<numRows; i++) {
+		for (unsigned int j=0; j<numCols; j++) {
 			double otherValue;
-			get(i, j, currentValue);
 			matrixB.get(i, j, otherValue);
-			set(i, j, currentValue + otherValue);
+			data[i][j] = data[i][j] + otherValue;
 		}
 	}
 	return true;
 }
 bool Matrix::subtract(const Matrix& matrixB) {
-	if (num_rows() != matrixB.num_rows() || num_cols() != matrixB.num_cols()) {
+	if (numRows != matrixB.num_rows() || numCols != matrixB.num_cols()) {
 		return false;
 	}
-	for (unsigned int i=0; i<num_rows(); i++) {
-		for (unsigned int j=0; j<num_cols(); j++) {
-			double currentValue;
+	for (unsigned int i=0; i<numRows; i++) {
+		for (unsigned int j=0; j<numCols; j++) {
 			double otherValue;
-			get(i, j, currentValue);
 			matrixB.get(i, j, otherValue);
-			set(i, j, currentValue - otherValue);
+			data[i][j] = data[i][j] - otherValue;
 		}
 	}
 	return true;
 }
 void Matrix::operator= (const Matrix& a) {
 	clear();
-	if (a.num_rows() == 0 || a.num_cols() == 0) {
-		numRows = 0;
-		numCols = 0;
-	} else {
-		numRows = a.num_rows();
-		numCols = a.num_cols();
-		data = new double*[num_rows()];
-		for (unsigned int i=0; i<num_rows(); i++) {
-			data[i] = new double[num_cols()];
-			for (unsigned int j=0; j<num_cols(); j++) {
+	if (a.num_rows() != 0 && a.num_cols() != 0) {
+		numRows = a.numRows;
+		numCols = a.numCols;
+		data = new double*[numRows];
+		for (unsigned int i=0; i<numRows; i++) {
+			data[i] = new double[numCols];
+			for (unsigned int j=0; j<numCols; j++) {
 				double tempNum;
 				a.get(i, j, tempNum);
-				set(i, j, tempNum);
+				data[i][j] = tempNum;
 			}
 		}
 	}
 }
 double* Matrix::get_row(unsigned int row) {
 	double* requestedRow = NULL;
-	if (!(row < num_rows())) {
+	if (row >= numRows) {
 		return requestedRow;
 	}
-	requestedRow = new double[num_rows()];
-	for (unsigned int i=0; i<num_cols(); i++) {
-		double tempVal;
-		get(row, i, tempVal);
-		requestedRow[i] = tempVal;
+	requestedRow = new double[numRows];
+	for (unsigned int i=0; i<numCols; i++) {
+		requestedRow[i] = data[row][i];
 	}
 	return requestedRow;
 }
 double* Matrix::get_col(unsigned int col) {
-	if (!(col < num_cols())) {
+	if (!(col < numCols)) {
 		double* nullPointer = NULL;
 		return nullPointer;
 	}
-	double* requestedCol = new double[num_cols()];
-	for (unsigned int i=0; i<num_rows(); i++) {
-		double tempVal;
-		get(i, col, tempVal);
-		requestedCol[i] = tempVal;
+	double* requestedCol = new double[numCols];
+	for (unsigned int i=0; i<numRows; i++) {
+		requestedCol[i] = data[i][col];
 	}
 	return requestedCol;
 }
@@ -223,8 +199,8 @@ Matrix* Matrix::quarter() {
 		}
 		return matrixPointer;
 	}
-	unsigned int rowNum = ceil(double(num_rows()) / 2);
-	unsigned int colNum = ceil(double(num_cols()) / 2);
+	unsigned int rowNum = ceil(double(numRows) / 2);
+	unsigned int colNum = ceil(double(numCols) / 2);
 	for (unsigned int i=0; i<4; i++) {
 		matrixPointer[i] = Matrix(rowNum, colNum, 0);
 		if (i == 0) {
@@ -237,26 +213,26 @@ Matrix* Matrix::quarter() {
 			}
 		} else if (i == 1) {
 			for (unsigned int j=0; j<rowNum; j++) {
-				for (unsigned int k=int(double(num_cols()) /2); k<num_cols(); k++) {
+				for (unsigned int k=int(double(numCols) /2); k<numCols; k++) {
 					double currentVal;
 					get(j, k, currentVal);
 					matrixPointer[i].set(j, k-colNum, currentVal);
 				}
 			}
 		} else if (i == 2) {
-			for (unsigned int j=int(double(num_rows()) /2); j<num_rows(); j++) {
+			for (unsigned int j=int(double(numRows) /2); j<numRows; j++) {
 				for (unsigned int k=0; k<colNum; k++) {
 					double currentVal;
 					get(j, k, currentVal);
-					matrixPointer[i].set(j-int(double(num_rows()) /2), k, currentVal);
+					matrixPointer[i].set(j-int(double(numRows) /2), k, currentVal);
 				}
 			}
 		} else if (i == 3) {
-			for (unsigned int j=int(double(num_rows()) /2); j<num_rows(); j++) {
-				for (unsigned int k=int(double(num_cols()) /2); k<num_cols(); k++) {
+			for (unsigned int j=int(double(numRows) /2); j<numRows; j++) {
+				for (unsigned int k=int(double(numCols) /2); k<numCols; k++) {
 					double currentVal;
 					get(j, k, currentVal);
-					matrixPointer[i].set(j-int(double(num_rows()) /2), k-int(double(num_cols()) /2), currentVal);
+					matrixPointer[i].set(j-int(double(numRows) /2), k-int(double(numCols) /2), currentVal);
 				}
 			}
 		}	
