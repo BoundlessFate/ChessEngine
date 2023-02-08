@@ -35,10 +35,8 @@ int main(){
 	std::cout << "Completed all simple tests." << std::endl;
 
 	//Uncomment this to allocate a lot of 100x100 matrices so leaks will be bigger.
-	/*
-	BatchTest(100,0.1,100,100,50);
-	std::cout << "Completed all batch tests." << std::endl;
-	*/
+	/* BatchTest(100,0.1,100,100,50); */
+	/* std::cout << "Completed all batch tests." << std::endl; */
 
 	StudentTest();
 	std::cout << "Completed all student tests." << std::endl;
