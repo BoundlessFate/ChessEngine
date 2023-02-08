@@ -42,10 +42,8 @@ int main(){
 	std::cout << "Completed all student tests." << std::endl;
 
 	//Uncomment this if you write the resize() function.
-	/*
 	ExtraCreditTest();
 	std::cout << "Completed all student extra credit tests." << std::endl;
-	*/
 	return 0;
 }
 
@@ -227,7 +225,14 @@ void StudentTest(){
 
 //Write this if you write resize()
 void ExtraCreditTest(){
-
+	Matrix testMatrix1(5,5,3);
+	testMatrix1.resize(10,10,8);
+	double testVal1;
+	double testVal2;
+	testMatrix1.get(0,0,testVal1);
+	testMatrix1.get(9,9,testVal2);
+	assert(testVal1 == 3);
+	assert(testVal2 == 8);
 }
 
 

@@ -45,6 +45,8 @@ public:
 	double* get_col(unsigned int col);
 	// Returns An Array Of Matrices, Each Being A Matrix Of One Quarter Of The Original Matrix
 	Matrix* quarter();
+	// Resizes the matrix and fills in any values with the fill value if it is larger
+	void resize(unsigned int row, unsigned int col, double fill);
 private:
 	// Private Variables
 	// Number Of Rows

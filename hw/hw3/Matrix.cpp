@@ -35,7 +35,7 @@ Matrix::Matrix(unsigned int row, unsigned int col, double fill) {
 			// fill_n fills the array with the fill value
 			std::fill_n(data[i], col, fill);
 		}
-	// If fill=0, this function can slightly optimize runtime
+		// If fill=0, this function can slightly optimize runtime
 	} else {
 		for (unsigned int i=0; i<row; i++) {
 			data[i] = new double[col] {};
@@ -82,6 +82,7 @@ bool Matrix::operator!= (const Matrix& a) {
 		return true;
 	}
 	for (unsigned int i=0; i<numRows; i++) {
+	// Set temporary numRows and numCols
 		for (unsigned int j=0; j<numRows; j++) {
 			double currentVal = data[i][j];
 			double otherVal;
@@ -114,6 +115,7 @@ void Matrix::clear() {
 // Get a value at an index and pass it into the num parameter
 bool Matrix::get(unsigned int row, unsigned int col, double& num) const {
 	if ((row > numRows) || (col > numCols)) {
+		std::cerr << "Error 1: Index Out Of Bounds" << std::endl;
 		return false;
 	}
 	// If the row and col are valid indexes, set num = the value at the index
@@ -142,6 +144,7 @@ void Matrix::multiply_by_coefficient(double coefficient) {
 bool Matrix::swap_row(unsigned int numOne, unsigned int numTwo) {
 	// Check that the numOne and numTwo values fit in the matrix
 	if ((numOne > numRows) || (numTwo > numCols)) {
+		std::cerr << "Error 2: Row Index Out Of Bounds" << std::endl;
 		return false;
 	}
 	// Create a local pointer array temporarily, and set it equal to the first row
@@ -173,6 +176,7 @@ void Matrix::transpose() {
 // Adds two matrices together
 bool Matrix::add(const Matrix& matrixB) {
 	if (numRows != matrixB.num_rows() || numCols != matrixB.num_cols()) {
+		std::cerr << "Error 3: Matrices Are Not The Same Size" << std::endl;
 		return false;
 	}
 	// If the matrices are the same size, run the rest of the code
@@ -190,6 +194,7 @@ bool Matrix::add(const Matrix& matrixB) {
 // Subtracts two matrices
 bool Matrix::subtract(const Matrix& matrixB) {
 	if (numRows != matrixB.num_rows() || numCols != matrixB.num_cols()) {
+		std::cerr << "Error 4: Matrices Are Not The Same Size" << std::endl;
 		return false;
 	}
 	// Only run the following code if the matrices are the same size
@@ -231,6 +236,7 @@ double* Matrix::get_row(unsigned int row) {
 	double* requestedRow = NULL;
 	// Return null pointer if the specified row is out of bounds
 	if (row >= numRows) {
+		std::cerr << "Error 5: Row Index Is Out Of Bounds" << std::endl;
 		return requestedRow;
 	}
 	// Create a new array in the heap
@@ -245,6 +251,7 @@ double* Matrix::get_row(unsigned int row) {
 double* Matrix::get_col(unsigned int col) {
 	// Returns null if the column is out of bunds
 	if (!(col < numCols)) {
+		std::cerr << "Error 6: Column Index Is Out Of Bounds" << std::endl;
 		double* nullPointer = NULL;
 		return nullPointer;
 	}
@@ -306,12 +313,37 @@ Matrix* Matrix::quarter() {
 				for (unsigned int k=int(double(numCols) /2); k<numCols; k++) {
 					double currentVal;
 					get(j, k, currentVal);
-					matrixPointer[i].set(j-int(double(numRows) /2), k-int(double(numCols) /2), currentVal);
+					unsigned int indexRow = j-int(double(numRows)/2);
+					unsigned int indexCol = k-int(double(numCols)/2);
+					matrixPointer[i].set(indexRow, indexCol, currentVal);
 				}
 			}
 		}	
 	}
 	return matrixPointer;
+}
+void Matrix::resize(unsigned int row, unsigned int col, double fill) {
+	// FIRST THE FILL VALUE IS PLACED ON ALL INDEXES
+	// Fill data with values
+	double** tempData = new double*[row];
+	// Normal fill
+	for (unsigned int i=0; i<row; i++) {
+		tempData[i] = new double[col];
+		// fill_n fills the array with the fill value
+		std::fill_n(tempData[i], col, fill);
+	}
+	// NEXT THE ORIGINAL VALUES ARE COPIED OVER
+	for (unsigned int i=0; i<row && i<numRows; i++) {
+		for (unsigned int j=0; j<col && j<numCols; j++) {
+			tempData[i][j] = data[i][j];
+		}
+	}
+	// Clear Original Data From Heap
+	clear();
+	// Set Actual Matrix's Data To The New Data
+	data = tempData;
+	numRows = row;
+	numCols = col;
 }
 // << Operator Overload For Outputting
 std::ostream& operator<< (std::ostream& out, const Matrix& m) {
