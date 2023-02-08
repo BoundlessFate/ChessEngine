@@ -102,8 +102,10 @@ int main() {
 	cout << "New Vector: ";
 	remove_matching_elements(a, 3);
 	for (unsigned int i=0; i<a.size(); i++) {
-		cout << i << " ";
+		cout << a[i] << " ";
 	}
 	std::cout << "\n";
+
+	a.print();
   return 0; 
 }

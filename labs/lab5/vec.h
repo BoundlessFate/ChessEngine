@@ -30,6 +30,7 @@ public:
   void clear() { delete [] m_data;  create(); }
   bool empty() const { return m_size == 0; }
   size_type size() const { return m_size; }
+  void print();
 
   // ITERATOR OPERATIONS
   iterator begin() { return m_data; }
@@ -141,7 +142,7 @@ template <class T> void Vec<T>::resize(size_type n, const T& fill_in_value) {
   }
 }
 template <class T> int remove_matching_elements(Vec<T>& aVec, const T& checkValue) {
-	int i=0;
+	int unsigned i=0;
 	int count=0;
 	while (i < aVec.size()) {
 		if (aVec[i] == checkValue) {
@@ -152,5 +153,15 @@ template <class T> int remove_matching_elements(Vec<T>& aVec, const T& checkValu
 		}
 	}
 	return count;
+}
+template <class T> void Vec<T>::print() {
+	std::cout << "m_alloc: " << m_alloc << std::endl;
+	std::cout << "m_size: " << m_size << std::endl;
+	std::cout << "m_data: ";
+	std::cout << "[ ";
+	for (unsigned int i=0; i<m_size; i++) {
+		std::cout << m_data[i] << " ";
+	}
+	std::cout << "]" << std::endl;
 }
 #endif
