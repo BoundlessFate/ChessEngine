@@ -205,7 +205,24 @@ void SimpleTest(){  //well behaved getrow/read after
 
 //Write your own test cases here
 void StudentTest(){
-
+	Matrix testMatrix1;
+	Matrix testMatrix2(5,5,9.9);
+	for (unsigned int i=0; i<5; i++) {
+		for (unsigned int j=0; j<5; j++) {
+			double testNum;
+			testMatrix2.get(i,j,testNum);
+			assert(double_compare(testNum, 9.9));
+		}
+	}
+	testMatrix1 = testMatrix2;
+	assert(testMatrix1 == testMatrix2);
+	Matrix* tm1 = testMatrix1.quarter();
+	Matrix* tm2 = testMatrix2.quarter();
+	assert(tm1[0] == tm2[0]);
+	delete [] tm1;
+	delete [] tm2;
+	testMatrix1.clear();
+	assert(testMatrix1 != testMatrix2);
 }
 
 //Write this if you write resize()
