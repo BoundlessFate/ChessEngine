@@ -42,10 +42,8 @@ int main(){
 	std::cout << "Completed all student tests." << std::endl;
 
 	//Uncomment this if you write the resize() function.
-	/*
 	ExtraCreditTest();
 	std::cout << "Completed all student extra credit tests." << std::endl;
-	*/
 	return 0;
 }
 
@@ -205,12 +203,36 @@ void SimpleTest(){  //well behaved getrow/read after
 
 //Write your own test cases here
 void StudentTest(){
-
+	Matrix testMatrix1;
+	Matrix testMatrix2(5,5,9.9);
+	for (unsigned int i=0; i<5; i++) {
+		for (unsigned int j=0; j<5; j++) {
+			double testNum;
+			testMatrix2.get(i,j,testNum);
+			assert(double_compare(testNum, 9.9));
+		}
+	}
+	testMatrix1 = testMatrix2;
+	assert(testMatrix1 == testMatrix2);
+	Matrix* tm1 = testMatrix1.quarter();
+	Matrix* tm2 = testMatrix2.quarter();
+	assert(tm1[0] == tm2[0]);
+	delete [] tm1;
+	delete [] tm2;
+	testMatrix1.clear();
+	assert(testMatrix1 != testMatrix2);
 }
 
 //Write this if you write resize()
 void ExtraCreditTest(){
-
+	Matrix testMatrix1(5,5,3);
+	testMatrix1.resize(10,10,8);
+	double testVal1;
+	double testVal2;
+	testMatrix1.get(0,0,testVal1);
+	testMatrix1.get(9,9,testVal2);
+	assert(testVal1 == 3);
+	assert(testVal2 == 8);
 }
 
 

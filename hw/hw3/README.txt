@@ -65,7 +65,8 @@ what went wrong and where. The main function also helped a lot with debugging be
 EXTRA CREDIT: 
 Indicate here if you implemented resize() for extra credit.  
 Also document the order notation for your resize() function.
-
+	I implemented the resize() functon for extra credit. It runs in O(N^2) time, since it runs a double for loop
+	to input the fill values, and a double for loop to write the old matrix information in.
 
 
 MISC. COMMENTS TO GRADER:  
