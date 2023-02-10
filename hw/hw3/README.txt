@@ -38,17 +38,17 @@ num_rows O(1)
 
 get_column O(N)
 
-operator<< O(N^2)
+operator<< O(NM)
 
-quarter O(N^2)
+quarter O(NM)
 
-operator== O(N^2)
+operator== O(NM)
 
-operator!= O(N^2)
+operator!= O(NM)
 
 swap_rows O(1)
 
-rref (provided in matrix_main.cpp) O(N^2)
+rref (provided in matrix_main.cpp) O(NM)
 
 
 
