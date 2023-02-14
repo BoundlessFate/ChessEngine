@@ -7,10 +7,12 @@ Customer::Customer(const std::string& aCustomerID, const std::string& aCustomerN
 void Customer::rentItem(const std::string& aItemID, unsigned int aNum) {
 	std::list<std::string>::iterator itItem;
 	std::list<unsigned int>::iterator itNum;
-	for (itItem = rentedList.begin(), itNum = rentedListNum.begin(); itItem != rentedList.end(); itItem++, itNum++) {
-		if (*itItem == aItemID) {
-			*itNum += aNum;
-			return;
+	if (!rentedList.empty()) {
+		for (itItem = rentedList.begin(), itNum = rentedListNum.begin(); itItem != rentedList.end(); itItem++, itNum++) {
+			if (*itItem == aItemID) {
+				*itNum += aNum;
+				return;
+			}
 		}
 	}
 	rentedList.push_back(aItemID);

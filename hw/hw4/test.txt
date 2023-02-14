@@ -1,16 +1,4 @@
-T1001 1 available chainsaw
+T0001 4 available chainsaw
 
-T3056 6 available Floor_Jack
-
-T2001 2 available Roto_Hammer_1/2_inch
-
-T2002 2 available Roto_Hammer_1_inch
-
-T2003 2 available Roto_Hammer_2_inch
-
-T5010 1 available Submersible_Pump
-
-T4010 1 available 14_foot_step_ladder
-
-T4008 1 available 10_foot_step_ladder
+T0002 4 available Floor_Jack
 

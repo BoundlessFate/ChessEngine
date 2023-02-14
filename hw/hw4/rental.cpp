@@ -33,6 +33,8 @@ void rentHandler(const std::string& customerID, unsigned int actionNum,
 		// Add Customer To List If They Arent Already In
 		if (selectedCustomer == customerList.end()) {
 			customerList.push_back(Customer(customerID, customerName));
+			selectedCustomer = customerList.end();
+			selectedCustomer--;
 		}
 
 		// Remove actionNum from stock, and add actionNum number of items to the customers current renting amount
@@ -53,7 +55,6 @@ void returnHandler(const std::string& customerID, unsigned int actionNum,
 		if ((*selectedCustomer).getCustomerID() == customerID) {
 			break;
 		}
-std::ostream& operator<< (std::ostream& out, const Item& i);
 	}
 	// Error out if customer is not in list
 	if (selectedCustomer == customerList.end()) {
@@ -136,6 +137,7 @@ void customerParser(const std::string& inputFile, std::list<Item>& itemList, std
 				wordCount += 1;
 			} else if (wordCount == 4) {
 				toolID = currentWord;
+				wordCount += 1;
 			} else {
 				customerName = currentWord;
 				if (action == "rent") {
@@ -143,10 +145,11 @@ void customerParser(const std::string& inputFile, std::list<Item>& itemList, std
 							customerName, itemList, customerList);
 				} else if (action == "return") {
 					returnHandler(customerID, actionNum, toolID, 
-							itemList, customerList);
+					itemList, customerList);
 				} else {
 					std::cerr << "Error: Incorrect Customer Action Selected" << std::endl;
 				}
+				wordCount = 0;
 			}
 		}
 	}
@@ -175,7 +178,7 @@ int main(int argc, char** argv) {
 		toolParser(toolFile, itemList);
 		customerParser(customerFile, itemList, customerList);
 		inventoryOutput(inventoryOutputFile, itemList);
-		
+
 	}
 	return 1;
 }

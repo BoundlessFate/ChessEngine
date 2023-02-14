@@ -13,7 +13,7 @@ std::list<std::string> Item::removeFromWaitlist() {
 	std::list<unsigned int>::iterator numIterator;
 	std::list<std::string> waitlistRemoved;
 	while(true) {
-		bool checkToContinue = false;
+		bool checkToContinue = true;
 		for(IDIterator = waitlistID.begin(), numIterator = waitlistNum.begin();
 				IDIterator != waitlistID.end() && numIterator != waitlistNum.end();
 				IDIterator++, numIterator++) {
@@ -25,7 +25,7 @@ std::list<std::string> Item::removeFromWaitlist() {
 				waitlistRemoved.push_back(std::to_string(*numIterator));
 				waitlistNum.erase(numIterator);
 				waitlistID.erase(IDIterator);
-				checkToContinue = true;
+				checkToContinue = false;
 				break;
 			}
 		}
