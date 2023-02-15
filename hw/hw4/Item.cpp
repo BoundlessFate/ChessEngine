@@ -35,3 +35,42 @@ std::list<std::string> Item::removeFromWaitlist() {
 	}
 	return waitlistRemoved;
 }
+void Item::addRentingList(const std::string& aID, unsigned int aNum) {
+	std::list<std::string>::iterator rentingIterator;
+	bool alreadyIn = false;
+	for (rentingIterator = rentingList.begin(); rentingIterator != rentingList.end();
+			rentingIterator++) {
+		if (*rentingIterator == aID) {
+			rentingIterator++;
+			*rentingIterator = std::to_string(stoi(*rentingIterator) + aNum);
+			break;
+			alreadyIn = true;
+		}
+	}
+	if (!alreadyIn) {
+		rentingList.push_back(aID);
+		rentingList.push_back(std::to_string(aNum));
+	}
+}
+void Item::subtractRentingList(const std::string& aID, unsigned int aNum) {
+	std::list<std::string>::iterator rentingIterator;
+	bool alreadyIn = false;
+	for (rentingIterator = rentingList.begin(); rentingIterator != rentingList.end();
+			rentingIterator++) {
+		if (*rentingIterator == aID) {
+			rentingIterator++;
+			*rentingIterator = std::to_string(stoi(*rentingIterator) - aNum);
+			alreadyIn = true;
+			break;
+		}
+	}
+	if (!alreadyIn) {
+		std::cerr << "Error: Trying to return when there is no person object. Continuing..." << std::endl;
+	}
+	if (stoi(*rentingIterator) <= 0) {
+		std::list<std::string>::iterator tempIterator = rentingIterator;
+		rentingIterator--;
+		rentingList.erase(rentingIterator);
+		rentingList.erase(tempIterator);
+	}
+}

@@ -39,10 +39,21 @@ void rentHandler(const std::string& customerID, unsigned int actionNum,
 
 		// Remove actionNum from stock, and add actionNum number of items to the customers current renting amount
 		(*selectedItem).rentTool(actionNum);
+		(*selectedItem).addRentingList((*selectedCustomer).getCustomerID(), actionNum);
 		(*selectedCustomer).rentItem(toolID, actionNum);
 	} else {
 		// Add Customer To Waitlist For This Item
 		(*selectedItem).addToWaitlist(customerID, actionNum);
+		std::list<Customer>::iterator selectedCustomer;
+		for (selectedCustomer = customerList.begin(); selectedCustomer != customerList.end(); selectedCustomer++) {
+			if ((*selectedCustomer).getCustomerID() == customerID) {
+				break;
+			}
+		}
+		// Add Customer To List If They Arent Already In
+		if (selectedCustomer == customerList.end()) {
+			customerList.push_back(Customer(customerID, customerName));
+		}
 	}
 	return;
 }
@@ -74,12 +85,14 @@ void returnHandler(const std::string& customerID, unsigned int actionNum,
 		}
 	}
 	(*selectedItem).returnTool(amountReturned);
+	(*selectedItem).subtractRentingList((*selectedCustomer).getCustomerID(), amountReturned);
 	std::list<std::string> exitWaitlist = (*selectedItem).removeFromWaitlist();
 	std::list<std::string>::iterator exitWaitlistI = exitWaitlist.begin();
 	for (selectedCustomer = customerList.begin(); selectedCustomer != customerList.end(); selectedCustomer++) {
 		if ((*selectedCustomer).getCustomerID() == *exitWaitlistI && exitWaitlistI != exitWaitlist.end()) {
 			exitWaitlistI++;
 			(*selectedCustomer).rentItem(toolID, stoi(*exitWaitlistI));
+			(*selectedItem).addRentingList((*selectedCustomer).getCustomerID(), stoi(*exitWaitlistI));
 			exitWaitlistI++;
 		}
 	}
@@ -116,7 +129,6 @@ void customerParser(const std::string& inputFile, std::list<Item>& itemList, std
 	std::string currentWord;
 	std::string customerID;
 	std::string action;
-	/* unsigned int timestamp; */
 	unsigned int actionNum;
 	std::string toolID;
 	std::string customerName;
@@ -130,7 +142,6 @@ void customerParser(const std::string& inputFile, std::list<Item>& itemList, std
 				action = currentWord;
 				wordCount += 1;
 			} else if (wordCount == 2) {
-				/* timestamp = stoi(currentWord); */
 				wordCount += 1;
 			} else if (wordCount == 3) {
 				actionNum = stoi(currentWord);
@@ -155,15 +166,57 @@ void customerParser(const std::string& inputFile, std::list<Item>& itemList, std
 	}
 	return;
 }
-void inventoryOutput(const std::string& file, std::list<Item>& itemList) {
+void inventoryOutput(const std::string& file, std::list<Item>& itemList,
+		std::list<Customer>& customerList) {
 	std::ofstream outFile;
 	outFile.open(file, std::ofstream::out | std::ofstream::trunc);
 	outFile.close();
 	outFile.open(file, std::ios_base::app);
 	std::list<Item>::iterator it;
 	for (it = itemList.begin(); it != itemList.end(); it++) {
+		std::list<std::string> waitlistCustomers = (*it).getWaitlistID();
+		std::list<unsigned int> waitlistCustomersNum = (*it).getWaitlistNum();
+		std::list<std::string> rentCustomers = (*it).getRentingList();
 		outFile << (*it).getID() << " " << (*it).getStock();
 		outFile << " available " << (*it).getName() << std::endl;
+		if (!rentCustomers.empty()) {
+			outFile << "Rental Customers: ";
+			std::list<std::string>::iterator rentIt;
+			for (rentIt = rentCustomers.begin(); rentIt != rentCustomers.end();
+					rentIt++) {
+				outFile << *rentIt << " ";
+				std::list<Customer>::iterator customerIt;
+				for (customerIt = customerList.begin(); 
+						customerIt != customerList.end(); customerIt++) {
+					if ((*customerIt).getCustomerID() == *rentIt) {
+						outFile << (*customerIt).getCustomerName();
+					}
+				}
+				rentIt++;
+				outFile << " (" << *rentIt << ") ";
+			}
+			outFile << std::endl;
+		}
+		if (!waitlistCustomers.empty()) {
+			outFile << "Pending Customers: ";
+			std::list<std::string>::iterator waitlistIt;
+			std::list<unsigned int>::iterator waitlistNumIt;
+			for (waitlistIt = waitlistCustomers.begin(), waitlistNumIt = waitlistCustomersNum.begin();
+					waitlistIt != waitlistCustomers.end();
+					waitlistIt++, waitlistNumIt++) {
+				outFile << *waitlistIt << " ";
+				std::list<Customer>::iterator customerIt;
+				for (customerIt = customerList.begin(); 
+						customerIt != customerList.end(); customerIt++) {
+					if ((*customerIt).getCustomerID() == *waitlistIt) {
+						std::cout << "test";
+						outFile << (*customerIt).getCustomerName();
+					}
+				}
+				outFile << " (" << *waitlistNumIt << ") ";
+			}
+			outFile << std::endl;
+		}
 		outFile << std::endl;
 	}
 }
@@ -177,7 +230,7 @@ int main(int argc, char** argv) {
 		std::string customerOutputFile = argv[4];
 		toolParser(toolFile, itemList);
 		customerParser(customerFile, itemList, customerList);
-		inventoryOutput(inventoryOutputFile, itemList);
+		inventoryOutput(inventoryOutputFile, itemList, customerList);
 
 	}
 	return 1;

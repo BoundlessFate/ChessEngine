@@ -37,5 +37,5 @@ unsigned int Customer::returnItem(const std::string& aItemID, unsigned int aNum)
 			break;
 		}
 	}
-	return *itNum;
+	return aNum;
 }
