@@ -29,9 +29,16 @@ void print(Node<T> *data, const std::string &label) {
 
 template <class T>
 void reverse(Node<T>* &input) {
-
-  // FILL IN THIS FUNCTION
-
+	Node<T>* lastNode = NULL;
+	Node<T>* currentNode = input;
+	Node<T>* nextNode;
+	while (currentNode != NULL) {
+		nextNode = currentNode->ptr;
+		currentNode->ptr = lastNode;
+		lastNode = currentNode;
+		currentNode = nextNode;
+	}
+	input = lastNode;
 }
 
 
