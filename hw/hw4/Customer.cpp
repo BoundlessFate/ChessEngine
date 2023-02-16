@@ -39,3 +39,13 @@ unsigned int Customer::returnItem(const std::string& aItemID, unsigned int aNum)
 	}
 	return aNum;
 }
+bool Customer::isRented(const std::string& aItemID) {
+	std::list<std::string>::iterator rentIt;
+	for (rentIt = rentedList.begin(); 
+			rentIt != rentedList.end(); rentIt++) {
+		if (*rentIt == aItemID) {
+			return true;
+		}
+	}
+	return false;
+}

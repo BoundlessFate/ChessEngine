@@ -1,7 +1,7 @@
 HOMEWORK 4: TOOL RENTAL LISTS
 
 
-NAME:  < insert name >
+NAME: Christopher Villanueva
 
 
 COLLABORATORS AND OTHER RESOURCES:
@@ -10,14 +10,14 @@ List the names of everyone you talked to about this assignment
 LMS, etc.), and all of the resources (books, online reference
 material, etc.) you consulted in completing this assignment.
 
-< insert collaborators / resources >
+Viane
 
 Remember: Your implementation for this assignment must be done on your
 own, as described in "Academic Integrity for Homework" handout.
 
 
 
-ESTIMATE OF # OF HOURS SPENT ON THIS ASSIGNMENT:  < insert # hours >
+ESTIMATE OF # OF HOURS SPENT ON THIS ASSIGNMENT: 25 Hours
 
 
 
@@ -36,17 +36,22 @@ e = # of rental or return events
 
 
 Load inventory file:
-
+	O(i^2)
+	Loops through each line in the inventory file, and places it in the correct order by id
 Rental event:
-
+	O(i+c)
+	Finds the item from the id, and rents the item for the customer that was parsed to find
 Return event - no pending customer(s):
-
+	O(2c+i)
+	Finds the customer from the id, finds the item the same way, and returns the tool
 Return event - with pending customer(s):
-
+	O(c+i+2cpr)
+	Finds the customer from the id, finds the item the same way, returns the tool, and rents tools for those in pending
 Entire program:
-
+	O(i^2+ei+eic+ec+ei+2ecpr+4ic^2+ic)
+	Loads inventory file, rents and returns for all cases necessary, and prints to the inventory and customer files
 
 
 MISC. COMMENTS TO GRADER:
 (optional, please be concise!)
-
+Took a while to finish, coded a rats nest, but eventually cleaned it up a bit

@@ -4,6 +4,101 @@
 #include "Item.h"
 #include "Customer.h"
 #include <list>
+bool checkValidToolID(const std::string& toolID) {
+	bool valid = true;
+	if (!(toolID[0] == 'T')) {
+		valid = false;
+	}
+	std::string idStringNum = toolID.substr(1);
+	if (!(idStringNum.size() == 4)) {
+		valid =  false;
+	}
+	for (unsigned int i=0; i<idStringNum.size(); i++) {
+		if (!isdigit(idStringNum[i])) {
+			valid = false;
+		}
+	}
+	int idNum = stoi(idStringNum);
+	if (!(idNum > 0)) {
+		valid = false;
+	}
+	if (!valid) {
+		std::cerr << "Invalid inventory ID ";
+		std::cerr << toolID;
+		std::cerr << " found in the inventory file.";
+		std::cerr << std::endl;
+		return false;
+	}
+	return true;
+}
+bool checkValidCustomerID(const std::string& customerID) {
+	bool valid = true;
+	if (!(customerID[0] == 'C')) {
+		valid = false;
+	}
+	std::string idStringNum = customerID.substr(1);
+	if (!(idStringNum.size() == 4)) {
+		valid =  false;
+	}
+	for (unsigned int i=0; i<idStringNum.size(); i++) {
+		if (!isdigit(idStringNum[i])) {
+			valid = false;
+		}
+	}
+	int idNum = stoi(idStringNum);
+	if (!(idNum > 0)) {
+		valid = false;
+	}
+	if (!valid) {
+		std::cerr << "Invalid customer information found";
+		std::cerr << " for ID ";
+		std::cerr << customerID;
+		std::cerr << " in the customer file.";
+		std::cerr << std::endl;
+		return false;
+	}
+	return true;
+}
+bool checkRequestedItem(const std::string& customerID, 
+		const std::string& itemID, std::list<Item>& itemList, 
+		const std::string& action) {
+	bool valid = false;
+	std::list<Item>::iterator itemIt;
+	for (itemIt = itemList.begin(); itemIt != itemList.end(); itemIt++) {
+		if ((*itemIt).getID() == itemID) {
+			valid = true;
+			break;
+		}
+	}
+	if (!valid) {
+		if (action == "rent") {
+		std::cerr << "Customer " << customerID;
+		std::cerr << " requested item " << itemID;
+		std::cerr << " which is not in the inventory.";
+		std::cerr << std::endl;
+		} else if (action == "return") {
+			std::cerr << "Customer " << customerID;
+			std::cerr << " attempted to return item ";
+			std::cerr << itemID;
+			std::cerr << " which is not in the inventory.";
+			std::cerr << std::endl;
+		}
+		return false;
+	}
+	return true;
+}
+bool checkIfRented(const std::string& customerID, 
+		const std::string& itemID, std::list<Customer>& customerList) {
+	std::list<Customer>::iterator customerIt;
+	for (customerIt = customerList.begin(); 
+			customerIt != customerList.end(); customerIt++) {
+		if ((*customerIt).getCustomerID() == customerID) {
+			return ((*customerIt).isRented(itemID));
+		}
+	}
+	return false;
+}
+
 bool checkActive(const Customer& customer, std::list<Item>& items) {
 	bool activeRent = !customer.getRentedList().empty();
 	bool activeWaitlist = false;
@@ -153,26 +248,30 @@ void toolParser(const std::string& inputFile, std::list<Item>& itemList) {
 	std::string toolName;
 	unsigned int wordCount = 0;
 	if(fileIn.is_open()) {
+		bool valid = true;
 		while (fileIn >> currentWord) {
 			if (wordCount == 0) {
 				toolID = currentWord;
+				valid = checkValidToolID(toolID);
 				wordCount += 1;
 			} else if (wordCount == 1) {
 				numStock = stoi(currentWord);
 				wordCount += 1;
 			} else {
 				toolName = currentWord;
-				std::list<Item>::iterator toolIt;
-				bool inserted = false;
-				for (toolIt = itemList.begin(); toolIt != itemList.end(); toolIt++) {
-					if ((*toolIt).getID() > toolID) {
-						itemList.insert(toolIt, Item(toolID, numStock, toolName));
-						inserted = true;
-						break;
+				if (valid) {
+					std::list<Item>::iterator toolIt;
+					bool inserted = false;
+					for (toolIt = itemList.begin(); toolIt != itemList.end(); toolIt++) {
+						if ((*toolIt).getID() > toolID) {
+							itemList.insert(toolIt, Item(toolID, numStock, toolName));
+							inserted = true;
+							break;
+						}
 					}
-				}
-				if (!inserted) {
-					itemList.push_back(Item(toolID, numStock, toolName));
+					if (!inserted) {
+						itemList.push_back(Item(toolID, numStock, toolName));
+					}
 				}
 				wordCount = 0;
 			}
@@ -191,9 +290,11 @@ void customerParser(const std::string& inputFile, std::list<Item>& itemList, std
 	std::string customerName;
 	unsigned int wordCount = 0;
 	if(fileIn.is_open()) {
+		bool valid = true;
 		while (fileIn >> currentWord) {
 			if (wordCount == 0) {
 				customerID = currentWord;
+				valid = checkValidCustomerID(customerID);
 				wordCount += 1;
 			} else if (wordCount == 1) {
 				action = currentWord;
@@ -205,17 +306,30 @@ void customerParser(const std::string& inputFile, std::list<Item>& itemList, std
 				wordCount += 1;
 			} else if (wordCount == 4) {
 				toolID = currentWord;
+				if (!checkRequestedItem(customerID, toolID, itemList, action)) {
+					valid = false;
+				}
 				wordCount += 1;
 			} else {
 				customerName = currentWord;
-				if (action == "rent") {
-					rentHandler(customerID, actionNum, toolID, 
-							customerName, itemList, customerList);
-				} else if (action == "return") {
-					returnHandler(customerID, actionNum, toolID, 
-							itemList, customerList);
-				} else {
-					std::cerr << "Error: Incorrect Customer Action Selected" << std::endl;
+				if (valid) {
+					if (action == "rent") {
+						rentHandler(customerID, actionNum, toolID, 
+								customerName, itemList, customerList);
+					} else if (action == "return") {
+						if (checkIfRented(customerID, toolID, customerList)) {
+						returnHandler(customerID, actionNum, toolID, 
+								itemList, customerList);
+						}
+						else {
+							std::cerr << "Customer " << customerID;
+							std::cerr << " attempted to return item ";
+							std::cerr << toolID << " which she/he did not rent.";
+							std::cerr << std::endl;
+						}
+					} else {
+						std::cerr << "Error: Incorrect Customer Action Selected" << std::endl;
+					}
 				}
 				wordCount = 0;
 			}
@@ -384,7 +498,7 @@ void customerOutput(const std::string& file, std::list<Item>& itemList,
 					break;
 				}
 			}
-			
+
 		}
 		if (!rentList.empty()) {
 			outFile << "Rentals: ";

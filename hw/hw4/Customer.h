@@ -9,6 +9,7 @@ public:
 	const std::list<unsigned int> getRentedListNum() const {return rentedListNum;}
 	void rentItem(const std::string& aItemID, unsigned int aNum);
 	unsigned int returnItem(const std::string& aItemID, unsigned int aNum);
+	bool isRented(const std::string& aItemID);
 private:
 	std::string customerID;
 	std::string customerName;
