@@ -50,7 +50,7 @@ unsigned int Customer::returnItem(const std::string& aItemID, unsigned int aNum)
 			itNum++;
 			// Check if the number of items attempted to be returned is more than they rented
 			// If this is true, send a warning message and continue
-			if (aNum > stoi(*itNum)) {
+			if ((int)aNum > stoi(*itNum)) {
 				std::cerr << "Error: More Being Returned Than Is Checked Out." << std::endl;
 				std::cerr << "Continuing By Changing aNum To Maximum." << std::endl;
 				aNum = stoi(*itNum);

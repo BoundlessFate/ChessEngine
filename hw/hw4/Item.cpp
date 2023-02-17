@@ -33,7 +33,7 @@ std::list<std::string> Item::removeFromWaitlist() {
 				waitIt != waitlist.end(); waitIt++) {
 			// If the index is a number and there is enough
 			// stock to fufill the pending request
-			if (num && stoi(*waitIt) <= stock) {
+			if (num && stoi(*waitIt) <= (int)stock) {
 				// Subtract the index from stock
 				stock -= stoi(*waitIt);
 				// Create a temporary iterator for the number

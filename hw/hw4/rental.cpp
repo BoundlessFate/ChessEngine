@@ -290,6 +290,11 @@ void returnHandler(const std::string& customerID, unsigned int actionNum,
 	// returns items in the Customer class
 	// How much it returned is set as amountReturned
 	unsigned int amountReturned = (*selectedCustomer).returnItem(toolID, actionNum);
+																	/* // Erase the customer from customerList if they */ 
+	/* // arent renting or on any waitlists */
+	/* if (!checkActive(*selectedCustomer, itemList)) { */
+	/* 	customerList.erase(selectedCustomer); */
+	/* } */
 	// Create an iterator for itemList
 	std::list<Item>::iterator selectedItem;
 	// Get the item that the customer tries to rent
@@ -321,11 +326,6 @@ void returnHandler(const std::string& customerID, unsigned int actionNum,
 			// Set exitWaitlistI to be the next ID
 			exitWaitlistI++;
 		}
-	}
-	// Erase the customer from customerList if they 
-	// arent renting or on any waitlists
-	if (!checkActive(*selectedCustomer, itemList)) {
-		customerList.erase(selectedCustomer);
 	}
 	// Exit out of the function
 	return;
