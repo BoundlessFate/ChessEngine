@@ -12,40 +12,36 @@ Item::Item(const std::string& aID, unsigned int aStock, const std::string& aName
 // Add the id to the waitlist with the given number
 void Item::addToWaitlist(const std::string& aID, unsigned int aNum) {
 	// Push back the id
-	waitlist.push_back(aID);
+	waitlistID.push_back(aID);
 	// Push back the requested number
-	waitlist.push_back(std::to_string(aNum));
+	waitlistNum.push_back(aNum);
 }
 // Removes the maximum it can from the waitlist, 
 // and returns the ids of the items it removed
 std::list<std::string> Item::removeFromWaitlist() {
 	// Create an iterator to go through the waitlist
-	std::list<std::string>::iterator waitIt;
-	// Create a list to hold every id that left the waitlist
+	std::list<std::string>::iterator IDIterator;
+	// Create an iterator to go through the waitlist nums
+	std::list<unsigned int>::iterator numIterator;
+	// Create a list to hold every id and num that left the waitlist
 	std::list<std::string> waitlistRemoved;
-	// Bool to hold if the current index is a number or not
-	bool num = false;
 	while(true) {
 		// If checkToBreak stays true, the while loop is broken
 		bool checkToBreak = true;
 		// Iterate throug the waitlist
-		for(waitIt = waitlist.begin(); 
-				waitIt != waitlist.end(); waitIt++) {
-			// If the index is a number and there is enough
-			// stock to fufill the pending request
-			if (num && stoi(*waitIt) <= (int)stock) {
+		for(IDIterator = waitlistID.begin(), numIterator = waitlistNum.begin();
+				IDIterator != waitlistID.end() && numIterator != waitlistNum.end();
+				IDIterator++, numIterator++) {
+			// If there is enough stock to fufill the pending request
+			if (*numIterator <= stock) {
 				// Subtract the index from stock
-				stock -= stoi(*waitIt);
-				// Create a temporary iterator for the number
-				std::list<std::string>::iterator numIt = waitIt;
-				// Set waitIt to the index of the previous number
-				waitIt--;
+				stock -= *numIterator;
 				// Add the index and number to waitlistRemoved
-				waitlistRemoved.push_back(*numIt);
-				waitlistRemoved.push_back(*waitIt);
+				waitlistRemoved.push_back(*IDIterator);
+				waitlistRemoved.push_back(std::to_string(*numIterator));
 				// Erase the index and number form the waitlist
-				waitlist.erase(numIt);
-				waitlist.erase(waitIt);
+				waitlistNum.erase(numIterator);
+				waitlistID.erase(IDIterator);
 				// set checkToBreak to false,
 				// repeating the loop again
 				checkToBreak = false;
@@ -53,8 +49,6 @@ std::list<std::string> Item::removeFromWaitlist() {
 				// you already found a good index
 				break;
 			}
-			// Flip number from false to true or true to false
-			num = !num;
 		}
 		// Check to break out of the while loop
 		if (checkToBreak) {

@@ -15,8 +15,6 @@ public:
 	unsigned int getStock() const {return stock;}
 	// Returns the Name
 	const std::string& getName() const {return name;}
-	// Returns the waitlist
-	const std::list<std::string> getWaitlist() const {return waitlist;}
 	// rents the tool and adjusts values
 	void rentTool(unsigned int aNum) {stock -= aNum;}
 	// Returns the tool and adjusts values
@@ -31,6 +29,10 @@ public:
 	void subtractRentingList(const std::string& aID, unsigned int aNum);
 	// returns rentingList
 	std::list<std::string> getRentingList() const {return rentingList;}
+	// Returns the waitlistID
+	std::list<std::string> getWaitlistID() const {return waitlistID;}
+	// Returns the waitlistNum
+	std::list<unsigned int> getWaitlistNum() const {return waitlistNum;}
 private:
 	// The Item ID
 	std::string ID;
@@ -39,7 +41,9 @@ private:
 	// The item name
 	std::string name;
 	// The item waitlist and values people are waiting for
-	std::list<std::string> waitlist;
+	std::list<std::string> waitlistID;
+	// The values of the waitlist
+	std::list<unsigned int> waitlistNum;
 	// The items list of current renters
 	std::list<std::string> rentingList;
 };

@@ -168,12 +168,12 @@ bool checkActive(const Customer& customer, std::list<Item>& items) {
 	// Iterate through all items
 	for (itemIt = items.begin(); itemIt != items.end(); itemIt++) {
 		// gather the waitlist for the item
-		std::list<std::string> waitlist = (*itemIt).getWaitlist();
+		std::list<std::string> waitlistID = (*itemIt).getWaitlistID();
 		// Create an iterator for the items waitlist
 		std::list<std::string>::iterator waitlistIt;
 		// Iterate through the items waitlist
-		for (waitlistIt = waitlist.begin(); 
-				waitlistIt != waitlist.end(); waitlistIt++) {
+		for (waitlistIt = waitlistID.begin(); 
+				waitlistIt != waitlistID.end(); waitlistIt++) {
 			// If the person is in the waitlist
 			if (*waitlistIt == customer.getCustomerID()) {
 				// Set activeWaitlist to true
@@ -290,11 +290,11 @@ void returnHandler(const std::string& customerID, unsigned int actionNum,
 	// returns items in the Customer class
 	// How much it returned is set as amountReturned
 	unsigned int amountReturned = (*selectedCustomer).returnItem(toolID, actionNum);
-																	/* // Erase the customer from customerList if they */ 
-	/* // arent renting or on any waitlists */
-	/* if (!checkActive(*selectedCustomer, itemList)) { */
-	/* 	customerList.erase(selectedCustomer); */
-	/* } */
+	// Erase the customer from customerList if they 
+	// arent renting or on any waitlists
+	if (!checkActive(*selectedCustomer, itemList)) {
+		customerList.erase(selectedCustomer);
+	}
 	// Create an iterator for itemList
 	std::list<Item>::iterator selectedItem;
 	// Get the item that the customer tries to rent
@@ -316,7 +316,8 @@ void returnHandler(const std::string& customerID, unsigned int actionNum,
 	for (selectedCustomer = customerList.begin(); 
 			selectedCustomer != customerList.end(); selectedCustomer++) {
 		// If the customer selected is in the current index of exitWaitlist
-		if ((*selectedCustomer).getCustomerID() == *exitWaitlistI) {
+		if ((*selectedCustomer).getCustomerID() == *exitWaitlistI &&
+				exitWaitlistI != exitWaitlist.end()) {
 			// change exitWaitlistI to be the value that the person wanted
 			exitWaitlistI++;
 			// Have the customer rent items of the amount they wanted
@@ -480,7 +481,8 @@ void inventoryOutput(const std::string& file, std::list<Item>& itemList,
 	// Create an iterator and iterate through all items in itemList
 	std::list<Item>::iterator it;
 	for (it = itemList.begin(); it != itemList.end(); it++) {
-		std::list<std::string> waitlist = (*it).getWaitlist();
+		std::list<std::string> waitlistCustomers = (*it).getWaitlistID();
+		std::list<unsigned int> waitlistCustomersNum = (*it).getWaitlistNum();
 		std::list<std::string> rentCustomers = (*it).getRentingList();
 		// Base output line for a item
 		outFile << (*it).getID() << " " << (*it).getStock();
@@ -541,16 +543,18 @@ void inventoryOutput(const std::string& file, std::list<Item>& itemList,
 			outFile << std::endl;
 		}
 		// If the waitlist isn't empty
-		if (!waitlist.empty()) {
+		if (!waitlistCustomers.empty()) {
 			// Output to outFile
 			outFile << "Pending Customers: ";
-			// Create a waitlist iterator
+			// Create waitlist iterators
 			std::list<std::string>::iterator waitlistIt;
+			std::list<unsigned int>::iterator waitlistNumIt;
 			std::list<std::string> outputList;
 			std::list<std::string>::iterator outputIt;
 			// Iterate through waitlist
-			for (waitlistIt = waitlist.begin();
-					waitlistIt != waitlist.end(); waitlistIt++) {
+			for (waitlistIt = waitlistCustomers.begin(), 
+					waitlistNumIt = waitlistCustomersNum.begin();
+					waitlistIt != waitlistCustomers.end(); waitlistIt++, waitlistNumIt++) {
 				// Create a string for the current output
 				std::string currentOutput;
 				// Add the Customer ID to the currentOutput
@@ -564,9 +568,8 @@ void inventoryOutput(const std::string& file, std::list<Item>& itemList,
 						currentOutput += (*customerIt).getCustomerName();
 					}
 				}
-				*waitlistIt++;
 				currentOutput += " (";
-				currentOutput += (*waitlistIt);
+				currentOutput += std::to_string(*waitlistNumIt);
 				currentOutput += ") ";
 				// Insert currentOutput into the outputList alphebetically
 				bool inserted = false;
@@ -606,7 +609,7 @@ void customerOutput(const std::string& file, std::list<Item>& itemList,
 		outFile << (*it).getCustomerID() << " ";
 		outFile << (*it).getCustomerName() << std::endl;
 		std::list<std::string> rentList;
-		std::list<std::string> waitOutputList;
+		std::list<std::string> waitlist;
 		std::list<Item>::iterator itItem;
 		// Iterate through all the items
 		for(itItem = itemList.begin(); itItem != itemList.end(); itItem++) {
@@ -643,33 +646,35 @@ void customerOutput(const std::string& file, std::list<Item>& itemList,
 				}
 			}
 			// Get the waitlist for the current item
-			std::list<std::string> waitlist = (*itItem).getWaitlist();
+			std::list<std::string> waitlistIDs = (*itItem).getWaitlistID();
+			std::list<unsigned int> waitlistNums = (*itItem).getWaitlistNum();
 			// Create an iterator for the waitlist
-			std::list<std::string>::iterator waitIt;
+			std::list<std::string>::iterator waitIDIt;
+			std::list<unsigned int>::iterator waitNumIt;
 			// Create an output string
 			std::string waitOutput;
 			// Iterate through waitlist
-			for (waitIt = waitlist.begin(); 
-					waitIt != waitlist.end(); waitIt++) {
+			for (waitIDIt = waitlistIDs.begin(), waitNumIt = waitlistNums.begin(); 
+					waitIDIt != waitlistIDs.end();
+					waitIDIt++, waitNumIt++) {
 				// If the id in waitlist is the same as the customer
-				if (*waitIt == (*it).getCustomerID()) {
+				if (*waitIDIt == (*it).getCustomerID()) {
 					waitOutput += (*itItem).getID();
 					waitOutput += " (";
-					waitIt++;
-					waitOutput += *waitIt;
+					waitOutput += std::to_string(*waitNumIt);
 					waitOutput += ") ";
 					// Insert waitOutput to the waitOutputList
 					bool inserted = false;
-					for (outputIt = waitOutputList.begin(); 
-							outputIt != waitOutputList.end(); outputIt++) {
+					for (outputIt = waitlist.begin(); 
+							outputIt != waitlist.end(); outputIt++) {
 						if (*outputIt > currentOutput) {
-							waitOutputList.insert(outputIt, waitOutput);
+							waitlist.insert(outputIt, waitOutput);
 							inserted = true;
 							break;
 						}
 					}
 					if (!inserted) {
-						waitOutputList.push_back(waitOutput);
+						waitlist.push_back(waitOutput);
 					}
 					break;
 				}
@@ -688,12 +693,12 @@ void customerOutput(const std::string& file, std::list<Item>& itemList,
 			outFile << std::endl;
 		}
 		// If there were things in waitOutputList
-		if (!waitOutputList.empty()) {
+		if (!waitlist.empty()) {
 			// Output info to outFile
 			outFile << "Pending: ";
 			std::list<std::string>::iterator outputIt;
-			for (outputIt = waitOutputList.begin(); 
-					outputIt != waitOutputList.end(); outputIt++) {
+			for (outputIt = waitlist.begin(); 
+					outputIt != waitlist.end(); outputIt++) {
 				outFile << *outputIt;
 			}
 			outFile << std::endl;

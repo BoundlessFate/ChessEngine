@@ -10,9 +10,9 @@ public:
 	// Returns customer name
 	const std::string& getCustomerName() const {return customerName;}
 	// Returns the rented list
-	// Rented list goes in pairs of:
-	// index 0: id, index 1: num, repeats
 	const std::list<std::string> getRentedList() const {return rentedList;}
+	// Rents the rented list num
+	const std::list<unsigned int> getRentedListNum() const {return rentedListNum;}
 	// Rents the given item and places it in rentedList
 	void rentItem(const std::string& aItemID, unsigned int aNum);
 	// Returns an item and takes it out of the rentedList
@@ -27,4 +27,6 @@ private:
 	std::string customerName;
 	// list of all current rents
 	std::list<std::string> rentedList;
+	// list of the nums of all current rents
+	std::list<unsigned int> rentedListNum;
 };

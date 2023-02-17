@@ -10,68 +10,61 @@ Customer::Customer(const std::string& aCustomerID, const std::string& aCustomerN
 }
 // rents item of the given id with the number specified
 void Customer::rentItem(const std::string& aItemID, unsigned int aNum) {
-	// Create an iterator to go throug the rentedList
+	// Create iterators to go through the rentedList
 	std::list<std::string>::iterator itItem;
+	std::list<unsigned int>::iterator itNum;
 	// Loop through the rentedList
-	for (itItem = rentedList.begin(); itItem != rentedList.end(); itItem++) {
-		// If the current index of rentedList is equal to the given itemID
-		if (*itItem == aItemID) {
-			// Go to the next index of itItem 
-			// (the number of things the id is currently renting)
-			itItem++;
-			// Add aNum to the number rented of that item id
-			*itItem = std::to_string(stoi(*itItem) + aNum);
-			// Return out to get out of the rest of the code
-			return;
+	if (!rentedList.empty()) {
+		for (itItem = rentedList.begin(), itNum = rentedListNum.begin(); 
+				itItem != rentedList.end(); itItem++, itNum++) {
+			// If the current index of rentedList is equal to the given itemID
+			if (*itItem == aItemID) {
+				// Add aNum to the number rented of that item id
+				*itNum += aNum;
+				// Return out to get out of the rest of the code
+				return;
+			}
 		}
 	}
 	// below code only runs if aItemID is not in the rentedList
 	// Add in the id to the end
 	rentedList.push_back(aItemID);
 	// Add the number you rented one index afterwards
-	rentedList.push_back(std::to_string(aNum));
+	rentedListNum.push_back(aNum);
 	// Exit out of the function
 	return;
 }
 // Returns items, and returns the number of items returned
 unsigned int Customer::returnItem(const std::string& aItemID, unsigned int aNum) {
-	// Bool to see if the id was found in the list later on
-	bool inList = false;
-	// Iterator to go through the list of rented items
+	// Iterators to go through the list of rented items
 	std::list<std::string>::iterator itItem;
+	std::list<unsigned int>::iterator itNum;
 	// Iterate through rentedList
-	for (itItem = rentedList.begin(); itItem != rentedList.end(); itItem++) {
+	for (itItem = rentedList.begin(), itNum = rentedListNum.begin(); 
+			itItem != rentedList.end(); itItem++, itNum++) {
 		// If the id of the current indexd matches aItemID
 		if (*itItem == aItemID) {
-			// Set inList to true to say that the id has been found
-			inList = true;
-			// Create a second iterator to hold the spot of the number of objects
-			std::list<std::string>::iterator itNum = itItem;
-			itNum++;
 			// Check if the number of items attempted to be returned is more than they rented
 			// If this is true, send a warning message and continue
-			if ((int)aNum > stoi(*itNum)) {
+			if (aNum > *itNum) {
 				std::cerr << "Error: More Being Returned Than Is Checked Out." << std::endl;
 				std::cerr << "Continuing By Changing aNum To Maximum." << std::endl;
-				aNum = stoi(*itNum);
+				aNum = *itNum;
 			}
 			// Subtract the number of items they are renting with aNum
-			*itNum = std::to_string(stoi(*itNum) - aNum);
+			*itNum -= aNum;
 			// if the number of items they are renting is 0
-			if (stoi(*itNum) == 0) {
+			if (*itNum == 0) {
 				// Erase the id and number indexes from rentedList
 				rentedList.erase(itItem);
-				rentedList.erase(itNum);
+				rentedListNum.erase(itNum);
 			}
 			// Break out of the loop because youve already found the item with the id
 			break;
 		}
 	}
-	// return the number of items that were removed
-	if (inList) {
-		return aNum;
-	}
-	return 0;
+	// Return amount returned
+	return aNum;
 }
 // Returns a boolean if the itemid is currently being rented
 bool Customer::isRented(const std::string& aItemID) {
