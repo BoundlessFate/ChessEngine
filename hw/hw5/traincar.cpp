@@ -371,10 +371,12 @@ void Separate(TrainCar* train1, TrainCar*& train2, TrainCar*& train3) {
 			CountForward(startOfTrain, smallerTrainEngines + smallerTrainCars, tempEngines, tempCars);
 			if (tempEngines == smallerTrainEngines && tempCars == smallerTrainCars) {
 				// Place cars into lists
+				PlaceForward(train1, startOfTrain, smallerTrainEngines + smallerTrainCars, train2, train3);
 				break;
 			}
 			CountForward(startOfTrain, largerTrainEngines + largerTrainCars, tempEngines, tempCars);
 			if (tempEngines == largerTrainEngines && tempCars == largerTrainCars) {
+				PlaceForward(train1, startOfTrain, largerTrainEngines + largerTrainCars, train2, train3);
 				// Place cars into lists
 				break;
 			}
@@ -382,11 +384,13 @@ void Separate(TrainCar* train1, TrainCar*& train2, TrainCar*& train3) {
 		} else if (endOfTrain != NULL) {
 			CountBackward(startOfTrain, smallerTrainEngines + smallerTrainCars, tempEngines, tempCars);
 			if (tempEngines == smallerTrainEngines && tempCars == smallerTrainCars) {
+				PlaceBackward(train1, startOfTrain, smallerTrainEngines + smallerTrainCars, train2, train3);
 				// Place cars into lists
 				break;
 			}
 			CountBackward(startOfTrain, largerTrainEngines + largerTrainCars, tempEngines, tempCars);
 			if (tempEngines == largerTrainEngines && tempCars == largerTrainCars) {
+				PlaceBackward(train1, startOfTrain, largerTrainEngines + largerTrainCars, train2, train3);
 				// Place cars into lists
 				break;
 			}

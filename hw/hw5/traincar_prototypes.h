@@ -38,3 +38,5 @@ void DisconnectFromTrain(TrainCar* aTrainCar, TrainCar*& startOfTrain);
 void Separate(TrainCar* train1, TrainCar*& train2, TrainCar*& train3);
 void CountForward(TrainCar* train, int num, int& numEngines, int& numCars);
 void CountBackward(TrainCar* train, int num, int& numEngines, int& numCars);
+void PlaceForward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, TrainCar* train1, TrainCar* train2);
+void PlaceBackward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, TrainCar* train1, TrainCar* train2);
