@@ -480,7 +480,6 @@ void SeparateTests() {
   PushBack(t, TrainCar::MakePassengerCar());
   SeparateTestHelper(t, "#1");
   
-  /*
   t = NULL;  
   PushBack(t, TrainCar::MakePassengerCar());
   PushBack(t, TrainCar::MakeDiningCar());
@@ -533,7 +532,6 @@ void SeparateTests() {
   PushBack(t, TrainCar::MakePassengerCar());
   PushBack(t, TrainCar::MakeSleepingCar());
   SeparateTestHelper(t, "#5");
-  */
 
   // Note: SeparateTestHelper takes care of deleting all memory
   // associated with these tests

@@ -347,7 +347,9 @@ void DisconnectFromTrain(TrainCar* aTrainCar, TrainCar*& startOfTrain) {
 	aTrainCar->next = NULL;
 	return;
 }
-void Separate(TrainCar* train1, TrainCar*& train2, TrainCar*& train3) {
+void Separate(TrainCar*& train1, TrainCar*& train2, TrainCar*& train3) {
+	train2 = NULL;
+	train3 = NULL;
 	float originalSpeed = CalculateSpeed(train1);
 	int total_weight, num_engines, num_freight_cars, 
 		num_passenger_cars, num_dining_cars, num_sleeping_cars;
@@ -446,21 +448,21 @@ void CountBackward(TrainCar* train, int num, int& numEngines, int& numCars) {
 	}
 	return;
 }
-void PlaceForward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, TrainCar* train1, TrainCar* train2) {
+void PlaceForward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, TrainCar*& train1, TrainCar*& train2) {
 	for (int i=0; i<num; i++) {
 		TrainCar* tempTrain = breakStart;
 		breakStart = breakStart->next;
-		DisconnectFromTrain(tempTrain, breakStart);
+		DisconnectFromTrain(tempTrain, startOfTrain);
 		PushBack(train1, tempTrain);
 	}
 	train2 = startOfTrain;
 	startOfTrain = NULL;
 }
-void PlaceBackward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, TrainCar* train1, TrainCar* train2) {
+void PlaceBackward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, TrainCar*& train1, TrainCar*& train2) {
 	for (int i=0; i<num; i++) {
 		TrainCar* tempTrain = breakStart;
 		breakStart = breakStart->prev;
-		DisconnectFromTrain(tempTrain, breakStart);
+		DisconnectFromTrain(tempTrain, startOfTrain);
 		PushBack(train1, tempTrain);
 	}
 	train2 = startOfTrain;

@@ -35,8 +35,8 @@ std::vector<TrainCar*> ShipFreight(TrainCar*& all_engines,
 		TrainCar*& all_freight, float min_speed, int max_cars_per_train);
 void AddEngine(TrainCar*& aTrainCar, TrainCar*& aEngineCar);
 void DisconnectFromTrain(TrainCar* aTrainCar, TrainCar*& startOfTrain);
-void Separate(TrainCar* train1, TrainCar*& train2, TrainCar*& train3);
+void Separate(TrainCar*& train1, TrainCar*& train2, TrainCar*& train3);
 void CountForward(TrainCar* train, int num, int& numEngines, int& numCars);
 void CountBackward(TrainCar* train, int num, int& numEngines, int& numCars);
-void PlaceForward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, TrainCar* train1, TrainCar* train2);
-void PlaceBackward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, TrainCar* train1, TrainCar* train2);
+void PlaceForward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, TrainCar*& train1, TrainCar*& train2);
+void PlaceBackward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, TrainCar*& train1, TrainCar*& train2);
