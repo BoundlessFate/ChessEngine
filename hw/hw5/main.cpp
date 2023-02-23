@@ -546,7 +546,7 @@ void StudentTests() {
   std::cout << "============================================================================" << std::endl;
   std::cout << "STUDENT TESTS" << std::endl;
   std::cout << "Before Remove" << std::endl;
-  // create a train with 6 dynamically-allocated cars in a doubly-linked list structure
+  // Create the same train used in simple train test
   TrainCar* student = NULL;
   PushBack(student, TrainCar::MakeEngine()); 
   PushBack(student, TrainCar::MakePassengerCar());
@@ -554,8 +554,8 @@ void StudentTests() {
   PushBack(student, TrainCar::MakeDiningCar());
   PushBack(student, TrainCar::MakePassengerCar());
   PushBack(student, TrainCar::MakeSleepingCar());
-
-  // inspect the cars, the links, the links, and sequential IDs...
+  
+  // Check that the train is working correctly with its pointers and values
   assert (student->isEngine());
   assert (student->prev == NULL);
   assert (student->next->isPassengerCar());
@@ -571,12 +571,12 @@ void StudentTests() {
   assert (student->next->next->next->next->getID() == student->next->next->next->getID()+1);
   assert (student->next->next->next->next->next->getID() == student->next->next->next->next->getID()+1);
 
-  // helper routine sanity check & print the results
+  // Print the train
   SanityCheck(student);
   PrintTrain(student);
 
   std::cout << "After Remove" << std::endl;
-  // Remove The First Car
+  // Remove The First Car using DisconnectFromTrain
   TrainCar* firstCar = student;
   DisconnectFromTrain(firstCar, student);
   // Assert that the car is removed
@@ -593,7 +593,7 @@ void StudentTests() {
   assert (student->next->next->next->getID() == student->next->next->getID()+1);
   assert (student->next->next->next->next->getID() == student->next->next->next->getID()+1);
 
-  // helper routine sanity check & print the results
+  // Print the new train
   SanityCheck(student);
   PrintTrain(student);
 	
@@ -602,27 +602,32 @@ void StudentTests() {
   assert (firstCar->next == NULL);
 
 
-  // helper routine sanity check & print the results
+  // Print the removed car
   SanityCheck(firstCar);
   PrintTrain(firstCar);
 
+  // Add the engine back into the list with AddEngine
   std::cout << "Add Engine Back" << std::endl;
   assert(student->isPassengerCar());
   AddEngine(student, firstCar);
+  // Verify the engine is added back into the train
   assert(student->isEngine());
 
-  // helper routine sanity check & print the results
+  // Print the train
   SanityCheck(student);
   PrintTrain(student);
 
+  // Add a second engine into the train
   std::cout << "Add Another Engine" << std::endl;
   assert(student->isEngine());
   TrainCar* newEngine = NULL;
   PushBack(newEngine, TrainCar::MakeEngine()); 
   AddEngine(student, newEngine);
+  // Verify the new engine is added correctly
   assert(student->isEngine());
+  assert(student->next->isEngine());
 
-  // helper routine sanity check & print the results
+  // Print the train
   SanityCheck(student);
   PrintTrain(student);
 
