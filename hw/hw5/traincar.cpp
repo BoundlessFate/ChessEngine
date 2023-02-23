@@ -379,19 +379,63 @@ void Separate(TrainCar*& train1, TrainCar*& train2, TrainCar*& train3) {
 	}
 	if(!CostWouldBeOne(startOfTrain, endOfTrain, smallerTrainEngines, smallerTrainCars, largerTrainEngines, largerTrainCars)) {
 		int tempEngines, tempCars;
-		for (int i = 1; i < smallerTrainEngines + smallerTrainCars; i++) {
-			CountForwardAndBackwards(startOfTrain, i, smallerTrainEngines+smallerTrainCars-i, tempEngines, tempCars);
-			if (tempEngines == smallerTrainEngines && tempCars == smallerTrainCars) {
-				PlaceForwardAndBackward(train1, endOfTrain, i, smallerTrainEngines+smallerTrainCars-i, train2, train3);
-				return;
+		TrainCar* closestEngine;
+		bool completed = false;
+		CountForward(startOfTrain, smallerTrainEngines+smallerTrainCars-1, tempEngines, tempCars);
+		if (tempCars == smallerTrainCars && tempEngines == smallerTrainEngines - 1) {
+			closestEngine = ClosestEngineOnRight(startOfTrain, smallerTrainCars+smallerTrainEngines-1);
+			DisconnectFromTrain(closestEngine, startOfTrain);
+			TrainCar* tempCar1 = startOfTrain;
+			int count = 1;
+			while (count < smallerTrainCars+smallerTrainEngines-1) {
+				tempCar1 = tempCar1->next;
+				count++;
 			}
+			TrainCar* tempCar2 = tempCar1->next;
+			Insert(closestEngine, tempCar1, tempCar2);
+			completed = true;
 		}
-		for (int i = 1; i < largerTrainEngines + smallerTrainCars; i++) {
-			CountForwardAndBackwards(startOfTrain, i, smallerTrainEngines+smallerTrainCars-i, tempEngines, tempCars);
-			if (tempEngines == smallerTrainEngines && tempCars == smallerTrainCars) {
-				PlaceForwardAndBackward(train1, endOfTrain, i, smallerTrainEngines+smallerTrainCars-i, train2, train3);
-				return;
+		CountForward(startOfTrain, largerTrainEngines+largerTrainCars-1, tempEngines, tempCars);
+		if (tempCars == largerTrainCars && tempEngines == largerTrainEngines - 1 && !completed) {
+			closestEngine = ClosestEngineOnRight(startOfTrain, largerTrainCars+largerTrainEngines-1);
+			DisconnectFromTrain(closestEngine, startOfTrain);
+			TrainCar* tempCar1 = startOfTrain;
+			int count = 1;
+			while (count < largerTrainCars+largerTrainEngines-1) {
+				tempCar1 = tempCar1->next;
+				count++;
 			}
+			TrainCar* tempCar2 = tempCar1->next;
+			Insert(closestEngine, tempCar1, tempCar2);
+			completed = true;
+		}
+		CountBackward(endOfTrain, smallerTrainEngines+smallerTrainCars-1, tempEngines, tempCars);
+		if (tempCars == smallerTrainCars && tempEngines == smallerTrainEngines - 1 && !completed) {
+			closestEngine = ClosestEngineOnLeft(endOfTrain, smallerTrainCars+smallerTrainEngines-1);
+			DisconnectFromTrain(closestEngine, startOfTrain);
+			TrainCar* tempCar1 = endOfTrain;
+			int count = 0;
+			while (count < smallerTrainCars+smallerTrainEngines-1) {
+				tempCar1 = tempCar1->prev;
+				count++;
+			}
+			TrainCar* tempCar2 = tempCar1->next;
+			Insert(closestEngine, tempCar1, tempCar2);
+			completed = true;
+		}
+		CountBackward(endOfTrain, largerTrainEngines+largerTrainCars-1, tempEngines, tempCars);
+		if (tempCars == largerTrainCars && tempEngines == largerTrainEngines - 1 && !completed) {
+			closestEngine = ClosestEngineOnLeft(endOfTrain, largerTrainCars+largerTrainEngines-1);
+			DisconnectFromTrain(closestEngine, startOfTrain);
+			TrainCar* tempCar1 = endOfTrain;
+			int count = 0;
+			while (count < largerTrainCars+largerTrainEngines-1) {
+				tempCar1 = tempCar1->prev;
+				count++;
+			}
+			TrainCar* tempCar2 = tempCar1->next;
+			Insert(closestEngine, tempCar1, tempCar2);
+			completed = true;
 		}
 	}
 
@@ -559,6 +603,35 @@ bool CostWouldBeOne(TrainCar* start, TrainCar* end, int enginesOne, int carsOne,
 		return true;
 	}
 	return false;
+}
+TrainCar* ClosestEngineOnRight(TrainCar* car, int numIn) {
+	for (int i=0; i<numIn; i++) {
+		car = car->next;
+	}
+	while (!(car->isEngine())) {
+		car = car->next;
+	}
+	return car;
+}
+TrainCar* ClosestEngineOnLeft(TrainCar* car, int numIn) {
+	for (int i=0; i<numIn; i++) {
+		car = car->prev;
+	}
+	while (!(car->isEngine())) {
+		car = car->prev;
+	}
+	return car;
+}
+void Insert(TrainCar* newCar, TrainCar* left, TrainCar* right) {
+	newCar->prev = left;
+	newCar->next = right;
+	if (left != NULL) {
+		left->next = newCar;
+	}
+	if (right != NULL) {
+		right->prev = newCar;
+	}
+	return;
 }
 // =======================================================================
 // =======================================================================

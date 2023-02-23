@@ -44,3 +44,6 @@ void PlaceBackward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, Train
 void PlaceForwardAndBackward(TrainCar*& startOfTrain, TrainCar* endOfTrain, int num1, int num2, TrainCar*& train1, TrainCar*& train2);
 void CountForwardAndBackwards(TrainCar* startOfTrain, int front, int back, int& numEngines, int& numCars);
 bool CostWouldBeOne(TrainCar* start, TrainCar* end, int enginesOne, int carsOne, int enginesTwo, int carsTwo);
+TrainCar* ClosestEngineOnRight(TrainCar* car, int numIn);
+TrainCar* ClosestEngineOnLeft(TrainCar* car, int numIn);
+void Insert(TrainCar* newCar, TrainCar* left, TrainCar* right);
