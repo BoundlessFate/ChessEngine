@@ -540,50 +540,6 @@ void PlaceBackward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, Train
 	train2 = startOfTrain;
 	startOfTrain = NULL;
 }
-void PlaceForwardAndBackward(TrainCar*& startOfTrain, TrainCar* endOfTrain, int num1, int num2, TrainCar*& train1, TrainCar*& train2) {
-	for (int i=0; i<num1; i++) {
-		TrainCar* tempTrain = startOfTrain;
-		startOfTrain = startOfTrain->next;
-		DisconnectFromTrain(tempTrain, startOfTrain);
-		PushBack(train1, tempTrain);
-	}
-	for (int i=0; i<num2; i++) {
-		TrainCar* tempTrain = endOfTrain;
-		endOfTrain = endOfTrain->prev;
-		DisconnectFromTrain(tempTrain, startOfTrain);
-		PushFront(train1, tempTrain);
-	}
-	// Flip the sections of cars so the ones that came from the back are first
-	for (int i=0; i<num2; i++) {
-		TrainCar* startOfNewTrain = train1;
-		TrainCar* tempTrain = train1;
-		startOfNewTrain = startOfNewTrain->next;
-		DisconnectFromTrain(tempTrain, train1);
-		PushBack(train1, tempTrain);
-	}
-	train2 = startOfTrain;
-	startOfTrain = NULL;
-	return;
-}
-void CountForwardAndBackwards(TrainCar* startOfTrain, int front, int back, int& numEngines, int& numCars) {
-	TrainCar* trainFront = startOfTrain;
-	TrainCar* trainBack = startOfTrain;
-	// Set trainBack to the last index
-	while (trainBack->next != NULL) {
-		trainBack = trainBack->next;
-	}
-	numEngines = 0;
-	numCars = 0;
-	int numEnginesFront = 0;
-	int numCarsFront = 0;
-	int numEnginesBack = 0;
-	int numCarsBack = 0;
-	CountForward(trainFront, front, numEnginesFront, numCarsFront);
-	CountBackward(trainBack, back, numEnginesBack, numCarsBack);
-	numEngines = numEnginesFront + numEnginesBack;
-	numCars = numCarsFront + numCarsBack;
-	return;
-}
 bool CostWouldBeOne(TrainCar* start, TrainCar* end, int enginesOne, int carsOne, int enginesTwo, int carsTwo) {
 	int numEngines, numCars;
 	CountForward(start, enginesOne + carsOne, numEngines, numCars);
