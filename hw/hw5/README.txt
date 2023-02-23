@@ -36,7 +36,11 @@ distance to dining and/or larger values for closest engine to sleeper)
 and/or optimally handling cases with > 2 engines.  Student choice on how 
 to prioritze between these goals.  Describe your priorization and your
 implementation.
-
+My code for separate can handle as many engines as it needs. I played around in desmos to find the formula where
+given the original speed, it returns the number of engines and other cars needed in each of the two
+trains for the speeds to match each other. Once I have these numbers, my separate function will find 
+a spot in the original train where one of the two final trains can be met with 1 or 2 disconnects (one on either side).
+It then sets the rest of the train equal to the other train.
 
 MISC. COMMENTS TO GRADER:  
 Optional, please be concise!

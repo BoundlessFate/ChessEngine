@@ -631,6 +631,25 @@ void StudentTests() {
   SanityCheck(student);
   PrintTrain(student);
 
+  std::cout << "Separate Tests" << std::endl;
+  PushBack(student, TrainCar::MakeEngine());
+  SeparateTestHelper(student, "#6");
+  assert(student == NULL);
+  PushBack(student, TrainCar::MakeEngine());
+  PushBack(student, TrainCar::MakeEngine());
+  PushBack(student, TrainCar::MakeEngine());
+  PushBack(student, TrainCar::MakeEngine());
+  PushBack(student, TrainCar::MakeEngine());
+  PushBack(student, TrainCar::MakePassengerCar());
+  PushBack(student, TrainCar::MakePassengerCar());
+  PushBack(student, TrainCar::MakePassengerCar());
+  PushBack(student, TrainCar::MakePassengerCar());
+  PushBack(student, TrainCar::MakePassengerCar());
+  PushBack(student, TrainCar::MakePassengerCar());
+  PushBack(student, TrainCar::MakePassengerCar());
+  SeparateTestHelper(student, "#7");
+  assert(student == NULL);
+
   // fully delete all TrainCar nodes to prevent a memory leak
   DeleteAllCars(student);
   //
