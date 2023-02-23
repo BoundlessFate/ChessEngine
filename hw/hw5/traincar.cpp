@@ -30,6 +30,16 @@ void PushBack(TrainCar*& aTraincar, TrainCar* bTraincar) {
 	bTraincar->prev = currentCar;
 	return;
 }
+void PushFront(TrainCar*& aTraincar, TrainCar* bTraincar) {
+	if (aTraincar == NULL) {
+		aTraincar = bTraincar;
+		return;
+	}
+	aTraincar->prev = bTraincar;
+	bTraincar->next = aTraincar;
+	aTraincar = bTraincar;
+	return;
+}
 void DeleteAllCars(TrainCar* aTraincar) {
 	if (aTraincar == NULL) {
 		return;
@@ -367,6 +377,24 @@ void Separate(TrainCar*& train1, TrainCar*& train2, TrainCar*& train3) {
 	while(endOfTrain->next != NULL) {
 		endOfTrain = endOfTrain->next;
 	}
+	if(!CostWouldBeOne(startOfTrain, endOfTrain, smallerTrainEngines, smallerTrainCars, largerTrainEngines, largerTrainCars)) {
+		int tempEngines, tempCars;
+		for (int i = 1; i < smallerTrainEngines + smallerTrainCars; i++) {
+			CountForwardAndBackwards(startOfTrain, i, smallerTrainEngines+smallerTrainCars-i, tempEngines, tempCars);
+			if (tempEngines == smallerTrainEngines && tempCars == smallerTrainCars) {
+				PlaceForwardAndBackward(train1, endOfTrain, i, smallerTrainEngines+smallerTrainCars-i, train2, train3);
+				return;
+			}
+		}
+		for (int i = 1; i < largerTrainEngines + smallerTrainCars; i++) {
+			CountForwardAndBackwards(startOfTrain, i, smallerTrainEngines+smallerTrainCars-i, tempEngines, tempCars);
+			if (tempEngines == smallerTrainEngines && tempCars == smallerTrainCars) {
+				PlaceForwardAndBackward(train1, endOfTrain, i, smallerTrainEngines+smallerTrainCars-i, train2, train3);
+				return;
+			}
+		}
+	}
+
 	while(true) {
 		int tempEngines, tempCars;
 		if (startOfTrain != NULL) {
@@ -463,10 +491,74 @@ void PlaceBackward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, Train
 		TrainCar* tempTrain = breakStart;
 		breakStart = breakStart->prev;
 		DisconnectFromTrain(tempTrain, startOfTrain);
+		PushFront(train1, tempTrain);
+	}
+	train2 = startOfTrain;
+	startOfTrain = NULL;
+}
+void PlaceForwardAndBackward(TrainCar*& startOfTrain, TrainCar* endOfTrain, int num1, int num2, TrainCar*& train1, TrainCar*& train2) {
+	for (int i=0; i<num1; i++) {
+		TrainCar* tempTrain = startOfTrain;
+		startOfTrain = startOfTrain->next;
+		DisconnectFromTrain(tempTrain, startOfTrain);
+		PushBack(train1, tempTrain);
+	}
+	for (int i=0; i<num2; i++) {
+		TrainCar* tempTrain = endOfTrain;
+		endOfTrain = endOfTrain->prev;
+		DisconnectFromTrain(tempTrain, startOfTrain);
+		PushFront(train1, tempTrain);
+	}
+	// Flip the sections of cars so the ones that came from the back are first
+	for (int i=0; i<num2; i++) {
+		TrainCar* startOfNewTrain = train1;
+		TrainCar* tempTrain = train1;
+		startOfNewTrain = startOfNewTrain->next;
+		DisconnectFromTrain(tempTrain, train1);
 		PushBack(train1, tempTrain);
 	}
 	train2 = startOfTrain;
 	startOfTrain = NULL;
+	return;
+}
+void CountForwardAndBackwards(TrainCar* startOfTrain, int front, int back, int& numEngines, int& numCars) {
+	TrainCar* trainFront = startOfTrain;
+	TrainCar* trainBack = startOfTrain;
+	// Set trainBack to the last index
+	while (trainBack->next != NULL) {
+		trainBack = trainBack->next;
+	}
+	numEngines = 0;
+	numCars = 0;
+	int numEnginesFront = 0;
+	int numCarsFront = 0;
+	int numEnginesBack = 0;
+	int numCarsBack = 0;
+	CountForward(trainFront, front, numEnginesFront, numCarsFront);
+	CountBackward(trainBack, back, numEnginesBack, numCarsBack);
+	numEngines = numEnginesFront + numEnginesBack;
+	numCars = numCarsFront + numCarsBack;
+	return;
+}
+bool CostWouldBeOne(TrainCar* start, TrainCar* end, int enginesOne, int carsOne, int enginesTwo, int carsTwo) {
+	int numEngines, numCars;
+	CountForward(start, enginesOne + carsOne, numEngines, numCars);
+	if (numEngines == enginesOne && numCars == carsOne) {
+		return true;
+	}
+	CountForward(start, enginesTwo + carsTwo, numEngines, numCars);
+	if (numEngines == enginesTwo && numCars == carsTwo) {
+		return true;
+	}
+	CountBackward(end, enginesOne + carsOne, numEngines, numCars);
+	if (numEngines == enginesOne && numCars == carsOne) {
+		return true;
+	}
+	CountBackward(end, enginesTwo + carsTwo, numEngines, numCars);
+	if (numEngines == enginesTwo && numCars == carsTwo) {
+		return true;
+	}
+	return false;
 }
 // =======================================================================
 // =======================================================================

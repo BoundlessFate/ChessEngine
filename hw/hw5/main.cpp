@@ -423,7 +423,6 @@ void SeparateTestHelper(TrainCar* &train1, const std::string &which_test) {
   std::vector<int> right = RecordIDs(train3);
 
   // calculate the number of links, unlinks, and train shifts
-  */
   // (all of these counts should be kept small to minimize train yard costs
   int num_unlinks, num_links, num_shifts;
   SeparateStatistics(original, left, right, num_unlinks, num_links, num_shifts);

@@ -18,6 +18,7 @@
 #include "traincar.h"
 #include <vector>
 void PushBack(TrainCar*& aTraincar, TrainCar* bTraincar);
+void PushFront(TrainCar*& aTraincar, TrainCar* bTraincar);
 void DeleteAllCars(TrainCar* aTrainCar);
 void TotalWeightAndCountCars(TrainCar* train, int& total_weight,
 		int& num_engines, int& num_freight_cars, int& num_passenger_cars,
@@ -40,3 +41,6 @@ void CountForward(TrainCar* train, int num, int& numEngines, int& numCars);
 void CountBackward(TrainCar* train, int num, int& numEngines, int& numCars);
 void PlaceForward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, TrainCar*& train1, TrainCar*& train2);
 void PlaceBackward(TrainCar*& startOfTrain, TrainCar* breakStart, int num, TrainCar*& train1, TrainCar*& train2);
+void PlaceForwardAndBackward(TrainCar*& startOfTrain, TrainCar* endOfTrain, int num1, int num2, TrainCar*& train1, TrainCar*& train2);
+void CountForwardAndBackwards(TrainCar* startOfTrain, int front, int back, int& numEngines, int& numCars);
+bool CostWouldBeOne(TrainCar* start, TrainCar* end, int enginesOne, int carsOne, int enginesTwo, int carsTwo);
