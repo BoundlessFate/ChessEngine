@@ -2,8 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <list>
-void CollectData(std::string inputFile, std::vector<std::vector<char>>& grid, std::list<std::string>& inWords, std::list<std::string>& outWords) {
+void CollectData(std::string inputFile, std::vector<std::vector<char>>& grid, std::vector<std::string>& inWords, std::vector<std::string>& outWords) {
 	std::ifstream fileIn;
 	fileIn.open(inputFile);
 	std::string currentWord;
@@ -53,7 +52,7 @@ int main(int argc, char** argv) {
 		std::string outputFile = argv[2];
 		std::string solutionType = argv[3];
 		std::vector<std::vector<char>> grid;
-		std::list<std::string> inWords, outWords;
+		std::vector<std::string> inWords, outWords;
 		CollectData(inputFile, grid, inWords, outWords);
 		std::cout << "-------------------------------" << std::endl;
 		std::cout << "Grid:" << std::endl;
@@ -64,13 +63,13 @@ int main(int argc, char** argv) {
 			std::cout << std::endl;
 		}
 		std::cout << "inWords:";
-		for (std::list<std::string>::iterator i = inWords.begin(); i != inWords.end(); i++) {
-			std::cout << " " << *i;
+		for (unsigned int i = 0; i < inWords.size(); i++) {
+			std::cout << " " << inWords[i];
 		}
 		std::cout << std::endl;
 		std::cout << "outWords:";
-		for (std::list<std::string>::iterator i = outWords.begin(); i != outWords.end(); i++) {
-			std::cout << " " << *i;
+		for (unsigned int i = 0; i < outWords.size(); i++) {
+			std::cout << " " << outWords[i];
 		}
 		std::cout << std::endl;
 		std::cout << "-------------------------------" << std::endl;
