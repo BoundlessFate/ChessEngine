@@ -78,13 +78,48 @@ bool addToDirection(unsigned int direction, int x, int y, std::vector<std::vecto
 		}
 		if (!wordWorks) {
 			grid[y][x] = tempLetter;
-		} else {
 		}
 	} else {
 		return false;
 	}
 	return wordWorks;
 }
+bool CheckDirection(unsigned int direction, int x, int y, std::vector<std::vector<char>>& grid, std::string word) {
+	// If all letters can be added properly, return true
+	if (word.size() == 0) {
+		return true;
+	}
+	// If it went out of bounds, return false
+	if (x < 0 || y < 0 || y >= (int)grid.size() || x >= (int)grid[y].size()) {
+		return false;
+	}
+	bool wordWorks = true;
+	// If the current space is valid
+	if (grid[y][x] == word[0]) {
+		word = word.substr(1);
+		if (direction == 0) {
+			wordWorks = CheckDirection(direction, x, y-1, grid, word);
+		} else if (direction == 1) {
+			wordWorks = CheckDirection(direction, x+1, y-1, grid, word); 
+		} else if (direction == 2) {
+			wordWorks = CheckDirection(direction, x+1, y, grid, word); 
+		} else if (direction == 3) {
+			wordWorks = CheckDirection(direction, x+1, y+1, grid, word); 
+		} else if (direction == 4) {
+			wordWorks = CheckDirection(direction, x, y+1, grid, word); 
+		} else if (direction == 5) {
+			wordWorks = CheckDirection(direction, x-1, y+1, grid, word); 
+		} else if (direction == 6) {
+			wordWorks = CheckDirection(direction, x-1, y, grid, word); 
+		} else if (direction == 7) {
+			wordWorks = CheckDirection(direction, x-1, y-1, grid, word); 
+		}
+	} else {
+		return false;
+	}
+	return wordWorks;
+}
+
 void FindSolution(std::vector<std::vector<char>> grid, std::vector<std::string> words, std::vector<std::vector<std::vector<char>>>& allSolutions) {
 	if (words.size() == 0) {
 		allSolutions.push_back(grid);
@@ -102,6 +137,61 @@ void FindSolution(std::vector<std::vector<char>> grid, std::vector<std::string> 
 			}
 		}
 	}
+	return;
+}
+void CheckSolutions(std::vector<std::vector<std::vector<char>>>& allSolutions, std::vector<std::string> words) {
+	std::vector<std::vector<std::vector<char>>> newSolutions;
+	if (words.size() == 0) {
+		return;
+	}
+	for (int i=0; i<(int)allSolutions.size(); i++) {
+		bool foundIncorrect = false;
+		for (int j=0; j<(int)allSolutions[i].size(); j++) {
+			for (int k=0; k<(int)allSolutions[i][j].size(); k++) {
+				for (unsigned int l=0; l<8; l++) {
+					for (int m=0; m<(int)words.size(); m++) {
+						if (CheckDirection(l, k, j, allSolutions[i], words[m])) {
+							foundIncorrect = true;
+							break;
+						}
+					}
+					if (foundIncorrect)
+						break;
+				}
+				if (foundIncorrect)
+					break;
+			}
+			if (foundIncorrect)
+				break;
+		}
+		if (!foundIncorrect) {
+			newSolutions.push_back(allSolutions[i]);
+		}
+	}
+	allSolutions = newSolutions;
+	return;
+}
+void DeleteDuplicates(std::vector<std::vector<std::vector<char>>>& allSolutions) {
+	std::vector<std::string> allUniqueSolutionStrings;
+	std::vector<std::vector<std::vector<char>>> uniqueSolutions;
+	for (int i=0; i<(int)allSolutions.size(); i++) {
+		std::string currentSolutionString = "";
+		for (int j=0; j<(int)allSolutions[i].size(); j++) {
+			for (int k=0; k<(int)allSolutions[i][k].size(); k++) {
+				currentSolutionString += allSolutions[i][j][k];
+			}
+		}
+		bool unique = true;
+		for (int j=0; j<(int)allUniqueSolutionStrings.size(); j++) {
+			if (currentSolutionString == allUniqueSolutionStrings[i])
+				unique = false;
+		}
+		if (unique) {
+			allUniqueSolutionStrings.push_back(currentSolutionString);
+			uniqueSolutions.push_back(allSolutions[i]);
+		}
+	}
+	allSolutions = uniqueSolutions;
 	return;
 }
 // ----------------------- CODE STARTS RUNNING HERE ------------------------------
@@ -133,17 +223,24 @@ int main(int argc, char** argv) {
 		std::cout << std::endl;
 		std::cout << "-------------------------------" << std::endl;
 		std::vector<std::vector<std::vector<char>>> allSolutions;
+		std::cout << "Finding Solutions..." << std::endl;
 		FindSolution(grid, inWords, allSolutions);
 		std::cout << allSolutions.size() << " Solutions." << std::endl;
-		for (unsigned int i=0; i<allSolutions.size(); i++) {
-			for (unsigned int j=0; j<allSolutions[i].size(); j++) {
-				for (unsigned int k=0; k<allSolutions[i][j].size(); k++) {
-					std::cout << allSolutions[i][j][k];
-				}
-				std::cout << std::endl;
-			}
-			std::cout << std::endl;
-		}
+		std::cout << "Deleting Duplicate Solutions..." << std::endl;
+		DeleteDuplicates(allSolutions);
+		std::cout << allSolutions.size() << " Solutions." << std::endl;
+		std::cout << "Checking For Bad Solutions..." << std::endl;
+		CheckSolutions(allSolutions, outWords);
+		std::cout << allSolutions.size() << " Solutions." << std::endl;
+		/* for (unsigned int i=0; i<allSolutions.size(); i++) { */
+		/* 	for (unsigned int j=0; j<allSolutions[i].size(); j++) { */
+		/* 		for (unsigned int k=0; k<allSolutions[i][j].size(); k++) { */
+		/* 			std::cout << allSolutions[i][j][k]; */
+		/* 		} */
+		/* 		std::cout << std::endl; */
+		/* 	} */
+		/* 	std::cout << std::endl; */
+		/* } */
 	} else {
 		std::cerr << "Error: Incorrect Number Of Arguments Entered." << std::endl;
 	}
