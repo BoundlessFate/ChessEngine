@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <algorithm>
 void CollectData(std::string inputFile, std::vector<std::vector<char>>& grid, std::vector<std::string>& inWords, std::vector<std::string>& outWords) {
 	std::ifstream fileIn;
 	fileIn.open(inputFile);
@@ -177,14 +178,16 @@ void DeleteDuplicates(std::vector<std::vector<std::vector<char>>>& allSolutions)
 	for (int i=0; i<(int)allSolutions.size(); i++) {
 		std::string currentSolutionString = "";
 		for (int j=0; j<(int)allSolutions[i].size(); j++) {
-			for (int k=0; k<(int)allSolutions[i][k].size(); k++) {
+			for (int k=0; k<(int)allSolutions[i][j].size(); k++) {
 				currentSolutionString += allSolutions[i][j][k];
 			}
 		}
 		bool unique = true;
 		for (int j=0; j<(int)allUniqueSolutionStrings.size(); j++) {
-			if (currentSolutionString == allUniqueSolutionStrings[i])
+			if (currentSolutionString == allUniqueSolutionStrings[j]) {
 				unique = false;
+				break;
+			}
 		}
 		if (unique) {
 			allUniqueSolutionStrings.push_back(currentSolutionString);
@@ -193,6 +196,45 @@ void DeleteDuplicates(std::vector<std::vector<std::vector<char>>>& allSolutions)
 	}
 	allSolutions = uniqueSolutions;
 	return;
+}
+void FillSolution(std::vector<std::vector<char>> grid, std::vector<std::vector<std::vector<char>>>& solutionVec, std::vector<char> letters) {
+	bool solution = true;
+	for (unsigned int i=0; i<grid.size(); i++) {
+		for (unsigned int j=0; j<grid[i].size(); j++) {
+			if (grid[i][j] == '*') {
+				for (unsigned int k=0; k<letters.size(); k++) {
+					std::vector<std::vector<char>> tempGrid = grid;
+					tempGrid[i][j] = letters[k];
+					FillSolution(tempGrid, solutionVec, letters);
+				}
+				solution = false;
+			}
+		}
+	}
+	if (solution)
+		solutionVec.push_back(grid);
+}
+void FillSolutionHandler(std::vector<std::vector<std::vector<char>>>& allSolutions, std::vector<std::string> words) {
+	std::vector<char> letters = {'a','b','c','d','e','f','g','h','i','j','k','l',
+		'm','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+	for (unsigned int i=0; i<words.size(); i++) {
+		if (words[i].size() == 1) {
+			for (unsigned int j=0; j<letters.size(); j++) {
+				if (words[i][0] == letters[j]) {
+					letters.erase(letters.begin() + j);
+				}
+			}
+		}
+	}
+	std::vector<std::vector<std::vector<char>>> newSolutions;
+	for (unsigned int i=0; i<allSolutions.size(); i++) {
+		FillSolution(allSolutions[i], newSolutions, letters);
+	}
+	allSolutions = newSolutions;
+	return;
+}
+bool sortBySize(std::string a, std::string b) {
+	return a.size() > b.size();
 }
 // ----------------------- CODE STARTS RUNNING HERE ------------------------------
 int main(int argc, char** argv) {
@@ -203,6 +245,9 @@ int main(int argc, char** argv) {
 		std::vector<std::vector<char>> grid;
 		std::vector<std::string> inWords, outWords;
 		CollectData(inputFile, grid, inWords, outWords);
+		std::cout << "Sorting Words By Length..." << std::endl;
+		std::sort(inWords.begin(), inWords.end(), sortBySize);
+		std::sort(outWords.begin(), outWords.end(), sortBySize);
 		std::cout << "-------------------------------" << std::endl;
 		std::cout << "Grid:" << std::endl;
 		for (unsigned int i=0; i< grid.size(); i++) {
@@ -225,6 +270,15 @@ int main(int argc, char** argv) {
 		std::vector<std::vector<std::vector<char>>> allSolutions;
 		std::cout << "Finding Solutions..." << std::endl;
 		FindSolution(grid, inWords, allSolutions);
+		std::cout << allSolutions.size() << " Solutions." << std::endl;
+		std::cout << "Deleting Duplicate Solutions..." << std::endl;
+		DeleteDuplicates(allSolutions);
+		std::cout << allSolutions.size() << " Solutions." << std::endl;
+		std::cout << "Checking For Bad Solutions..." << std::endl;
+		CheckSolutions(allSolutions, outWords);
+		std::cout << allSolutions.size() << " Solutions." << std::endl;
+		std::cout << "Filling Grid..." << std::endl;
+		FillSolutionHandler(allSolutions, outWords);
 		std::cout << allSolutions.size() << " Solutions." << std::endl;
 		std::cout << "Deleting Duplicate Solutions..." << std::endl;
 		DeleteDuplicates(allSolutions);
