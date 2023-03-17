@@ -1,0 +1,8 @@
+6 4
++ struct
++ sabc
++ tdef
++ rghi
++ ujkl
++ cmno
++ tpqr
