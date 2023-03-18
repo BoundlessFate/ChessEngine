@@ -3,17 +3,79 @@
 #include <fstream>
 #include <map>
 #include "Fighter.cpp"
+#include <algorithm>
+#include <set>
 //You may add additional typedefs, includes, etc. up here
 
 //This is the only array you are allowed to have in your program.
-const std::string move_names[7] = {"jab", "forward-tilt", "up-tilt", "down-tilt", "forward-smash", "up-smash", "down-smash"};
+std::string move_names[7] = {"jab", "forward-tilt", "up-tilt", "down-tilt", "forward-smash", "up-smash", "down-smash"};
 
 //Feel free to put forward declarations here
 
 void qAction(char*& outputFile, std::map<std::string, Fighter>& data, std::string& wordOne, std::string& wordTwo) {
+	std::ofstream outFile;
+	outFile.open(outputFile, std::ios_base::app);
+	std::map<std::string, Fighter>::iterator character = data.find(wordOne);
+	if (character == data.end()) {
+		outFile << "Invalid character name: " << wordOne << std::endl;
+		outFile << std::endl;
+		outFile.close();
+		return;
+	}
+	if (wordTwo == "all") {
+		outFile << wordOne << " down-smash: " << (character->second).getDsmashTime() << std::endl;
+		outFile << wordOne << " down-tilt: " << (character->second).getDtiltTime() << std::endl;
+		outFile << wordOne << " forward-smash: " << (character->second).getFsmashTime() << std::endl;
+		outFile << wordOne << " forward-tilt: " << (character->second).getFtiltTime() << std::endl;
+		outFile << wordOne << " jab: " << (character->second).getJabTime() << std::endl;
+		outFile << wordOne << " up-smash: " << (character->second).getUsmashTime() << std::endl;
+		outFile << wordOne << " up-tilt: " << (character->second).getUtiltTime() << std::endl;
+		outFile << std::endl;
+		outFile.close();
+		return;
+	}
+	std::string *move = std::find(std::begin(move_names), std::end(move_names), wordTwo);
+	if (move == std::end(move_names))
+		outFile << "Invalid move name: " << wordTwo << std::endl;
+	else if (wordTwo == "down-smash")
+		outFile << wordOne << " down-smash: " << (character->second).getDsmashTime() << std::endl;
+	else if (wordTwo == "down-tilt")
+		outFile << wordOne << " down-tilt: " << (character->second).getDtiltTime() << std::endl;
+	else if (wordTwo == "forward-smash")
+		outFile << wordOne << " forward-smash: " << (character->second).getFsmashTime() << std::endl;
+	else if (wordTwo == "forward-tilt")
+		outFile << wordOne << " forward-tilt: " << (character->second).getFtiltTime() << std::endl;
+	else if (wordTwo == "jab")
+		outFile << wordOne << " jab: " << (character->second).getJabTime() << std::endl;
+	else if (wordTwo == "up-smash")
+		outFile << wordOne << " up-smash: " << (character->second).getUsmashTime() << std::endl;
+	else
+		outFile << wordOne << " up-tilt: " << (character->second).getUsmashTime() << std::endl;
+	outFile << std::endl;
+	outFile.close();
 	return;
 }
 void fAction(char*& outputFile, std::map<std::string, Fighter>& data, std::string& wordOne, std::string& wordTwo) {
+	std::ofstream outFile;
+	outFile.open(outputFile, std::ios_base::app);
+	outFile << "-f " << wordOne << " " << wordTwo << std::endl;
+	if (wordOne == "down-smash") {
+		auto cmp = [](Fighter a, Fighter b) {return a.getDsmashTime() > b.getDsmashTime();};
+		std::set<Fighter, decltype(cmp)> fighterSet;
+		for (std::map<std::string, Fighter>::iterator i = data.begin(); i != data.end(); i++) {
+			fighterSet.insert(i->second);
+		}
+		int count = 0;
+		for (std::set<Fighter, decltype(cmp)>::iterator i = fighterSet.begin(); i != fighterSet.end(); i++) {
+			if (count == stoi(wordTwo)) {
+				break;
+			}
+			outFile << i->getName() << " " << i->getDsmashTime() << std::endl << std::endl;
+			count++;
+		}
+
+	}
+
 	return;
 }
 void sAction(char*& outputFile, std::map<std::string, Fighter>& data, std::string& wordOne, std::string& wordTwo) {
@@ -42,7 +104,6 @@ std::map<std::string, Fighter> ParseDatabase(char*& inputFileName) {
 			switch(wordNum) {
 				case 0:
 					name = currentWord;
-					wordNum++;
 					break;
 				case 1:
 					if (isdigit(currentWord[0])) {
@@ -50,7 +111,6 @@ std::map<std::string, Fighter> ParseDatabase(char*& inputFileName) {
 					} else {
 						isCharacter = false;
 					}
-					wordNum++;
 					break;
 				case 2:
 					if (isdigit(currentWord[0])) {
@@ -58,7 +118,6 @@ std::map<std::string, Fighter> ParseDatabase(char*& inputFileName) {
 					} else {
 						isCharacter = false;
 					}
-					wordNum++;
 					break;
 				case 3:
 					if (isdigit(currentWord[0])) {
@@ -66,7 +125,6 @@ std::map<std::string, Fighter> ParseDatabase(char*& inputFileName) {
 					} else {
 						isCharacter = false;
 					}
-					wordNum++;
 					break;
 				case 4:
 					if (isdigit(currentWord[0])) {
@@ -74,7 +132,6 @@ std::map<std::string, Fighter> ParseDatabase(char*& inputFileName) {
 					} else {
 						isCharacter = false;
 					}
-					wordNum++;
 					break;
 				case 5:
 					if (isdigit(currentWord[0])) {
@@ -82,7 +139,6 @@ std::map<std::string, Fighter> ParseDatabase(char*& inputFileName) {
 					} else {
 						isCharacter = false;
 					}
-					wordNum++;
 					break;
 				case 6:
 					if (isdigit(currentWord[0])) {
@@ -90,7 +146,6 @@ std::map<std::string, Fighter> ParseDatabase(char*& inputFileName) {
 					} else {
 						isCharacter = false;
 					}
-					wordNum++;
 					break;
 				case 7:
 					if (isdigit(currentWord[0])) {
@@ -99,12 +154,12 @@ std::map<std::string, Fighter> ParseDatabase(char*& inputFileName) {
 						isCharacter = false;
 					}
 					if (isCharacter)
-						fighterMap.insert({name,Fighter(jab, ftilt, utilt, dtilt, fsmash, usmash, dsmash)});
-					wordNum = 0;
+						fighterMap.insert({name,Fighter(name, jab, ftilt, utilt, dtilt, fsmash, usmash, dsmash)});
+					wordNum = -1;
 					isCharacter = true;
 					break;
 				default:
-					wordNum = 0;
+					wordNum = -1;
 					isCharacter = true;
 					break;
 			}

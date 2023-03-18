@@ -1,5 +1,6 @@
 #include "Fighter.h"
-Fighter::Fighter(int aJabTime, int aFtiltTime, int aUtiltTime, int aDtiltTime, int aFsmashTime, int aUsmashTime, int aDsmashTime) {
+Fighter::Fighter(std::string aName, int aJabTime, int aFtiltTime, int aUtiltTime, int aDtiltTime, int aFsmashTime, int aUsmashTime, int aDsmashTime) {
+	name = aName;
 	jabTime = aJabTime;
 	ftiltTime = aFtiltTime;
 	utiltTime = aUtiltTime;

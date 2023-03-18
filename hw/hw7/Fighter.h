@@ -1,7 +1,8 @@
 #include <string>
 class Fighter {
 public:
-	Fighter(int aJabTime, int aFtiltTime, int aUtiltTime, int aDtiltTime, int aFsmashTime, int aUsmashTime, int aDsmashTime);
+	Fighter(std::string aName, int aJabTime, int aFtiltTime, int aUtiltTime, int aDtiltTime, int aFsmashTime, int aUsmashTime, int aDsmashTime);
+	std::string getName() const {return name;}
 	int getJabTime() const {return jabTime;}
 	int getFtiltTime() const {return ftiltTime;}
 	int getUtiltTime() const {return utiltTime;}
@@ -10,6 +11,7 @@ public:
 	int getUsmashTime() const {return usmashTime;}
 	int getDsmashTime() const {return dsmashTime;}
 private:
+	std::string name;
 	int jabTime;
 	int ftiltTime;
 	int utiltTime;
