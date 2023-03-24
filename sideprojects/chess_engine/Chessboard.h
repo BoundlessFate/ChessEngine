@@ -1,16 +1,20 @@
 #include <vector>
 #include "Piece.cpp"
+#include <string>
 class Chessboard {
 public:
 	// Constructor
-	Chessboard(char aMove);
+	Chessboard();
+	Chessboard(Chessboard& a);
+	~Chessboard();
 	// Public Functions
 	bool GetMove() {return whiteToMove;}
 	Piece GetPiece(char rank, int file);
-	std::vector<std::pair<Piece, std::pair<char, int>>> CheckValidMoves();
-	int EvaluatePosition();
+	std::vector<std::string> CheckValidMoves();
+	float EvaluatePosition();
 	void FlipMove() {whiteToMove = !whiteToMove;}
+	Piece** getBoard() {return data;}
 private:
-	std::vector<Piece> data;
+	Piece** data;
 	bool whiteToMove;
 };

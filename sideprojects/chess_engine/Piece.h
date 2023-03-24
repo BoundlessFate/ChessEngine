@@ -1,13 +1,10 @@
 class Piece {
 public:
 	// Constructor
-	Piece(char aType, char aRank, int aFile, char aColor);
+	Piece(char aType, char aColor);
 	char GetType() {return type;}
-	char GetFile() {return file;}
-	int GetRank() {return rank;}
+	char GetColor() {return color;}
 private:
 	char type;
-	char file;
-	int rank;
 	char color;
 };
