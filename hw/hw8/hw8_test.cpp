@@ -193,8 +193,8 @@ void ExtraCreditTest(std::ofstream& outfile){
 	b.insert(45);
 	outfile << "=============" << std::endl;
 	b.print_sideways(outfile);
-	outfile << "=============";
-	outfile << std::endl;
-	b.print_BFS_pretty(outfile);
-	outfile << std::endl;
+	/* outfile << "============="; */
+	/* outfile << std::endl; */
+	/* b.print_BFS_pretty(outfile); */
+	/* outfile << std::endl; */
 }
