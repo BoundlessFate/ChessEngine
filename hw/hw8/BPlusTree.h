@@ -78,12 +78,16 @@ template <class T>
 class BPlusTree{
 	public:
 		BPlusTree(const int& num);
+		BPlusTree(BPlusTree& a);
 		~BPlusTree();
+		void CopyHelper(BPlusTreeNode<T>* node);
 		void DeleteNode(BPlusTreeNode<T>* node);
 		void insert(T key);
 		BPlusTreeNode<T>* find(const T& key);
 		void print_sideways(std::ofstream& outfile);
 		void print_BFS(std::ofstream& outfile);
+		int GetB() {return b;}
+		BPlusTreeNode<T>* GetRootNode() {return rootNode;}
 	private:
 		BPlusTreeNode<T>* rootNode;
 		int b;
@@ -91,12 +95,35 @@ class BPlusTree{
 		void split(BPlusTreeNode<T>* node);
 		BPlusTreeNode<T>* find(const T key, BPlusTreeNode<T>* node);
 		void print_sideways(short depth, BPlusTreeNode<T>* node, std::ofstream& outfile);
-		void print_BFS(short depth, short targetDepth, BPlusTreeNode<T>* node, std::ofstream& outfile);
+		void print_BFS(short depth, short int targetDepth, BPlusTreeNode<T>* node, std::ofstream& outfile);
 };
 template <class T>
 BPlusTree<T>::BPlusTree(const int& num) {
 	rootNode = NULL;
 	b = num;
+	return;
+}
+template <class T>
+BPlusTree<T>::BPlusTree(BPlusTree& a) {
+	rootNode = NULL;
+	b = a.GetB();
+	CopyHelper(a.GetRootNode());
+	return;
+}
+template <class T>
+void BPlusTree<T>::CopyHelper(BPlusTreeNode<T>* node) {
+	// Insert the keys if they are a leaf node
+	if ((*node).is_leaf()) {
+		for (unsigned int i=0; i<(*node).keys.size(); i++) {
+			insert((*node).keys[i]);
+		}
+		return;
+	}
+	// Go down a level
+	for (unsigned int i=0; i<(*node).children.size(); i++) {
+		CopyHelper((*node).children[i]);
+	}
+	return;
 }
 template<class T>
 void BPlusTree<T>::insert(T key) {
@@ -112,12 +139,13 @@ template <class T>
 void BPlusTree<T>::insert(T key, BPlusTreeNode<T>* node) {
 	// If you are at the bottom of the branch
 	bool inserted = false;
-	if ((*node).children.size() == 0) {
+	if ((*node).is_leaf()) {
 		// Insert the key
 		for (unsigned int i=0; i<(*node).keys.size(); i++) {
 			if (key < (*node).keys[i]) {
 				(*node).keys.insert((*node).keys.begin()+i, key);
 				inserted = true;
+				break;
 			}
 		}
 		if (!inserted) {
@@ -154,45 +182,49 @@ void BPlusTree<T>::split(BPlusTreeNode<T>* node) {
 	int index = 0;
 	T valToCheck = (*node).keys[0];
 	for (unsigned int i=0; i<(*parentNode).keys.size(); i++) {
-		if (valToCheck > (*parentNode).keys[i])
+		if (valToCheck >= (*parentNode).keys[i])
 			index++;
 	}
 	// Create the new node
 	BPlusTreeNode<T>* newNode = new BPlusTreeNode<T>();
-	(*newNode).parent = (*node).parent;
+	(*newNode).parent = parentNode;
 	(*parentNode).children.insert((*parentNode).children.begin()+index+1, newNode);
 	int tempNum = (int)((*node).keys.size() / 2);
 	for (int i=(*node).keys.size() - 1; i>=tempNum; i--) {
 		(*newNode).keys.insert((*newNode).keys.begin(), (*node).keys[i]);
-		(*newNode).keys.erase((*newNode).keys.begin() + i);
+		(*node).keys.erase((*node).keys.begin() + i);
 	}
 	bool inserted = false;
 	T key = (*newNode).keys[0];
-	for (unsigned int i=0; i<(*node).keys.size(); i++) {
-		if (key < (*node).keys[i]) {
+	for (unsigned int i=0; i<(*parentNode).keys.size(); i++) {
+		if (key < (*parentNode).keys[i]) {
 			(*parentNode).keys.insert((*parentNode).keys.begin()+i, key);
 			inserted = true;
+			break;
 		}
 	}
 	if (!inserted)
 		(*parentNode).keys.push_back(key);
-	// Remove the leftmost key from the newNode if it isnt a child
-	if (!(*newNode).is_leaf())
-		(*newNode).keys.erase((*newNode).keys.begin());
-	// No changes to children if it is a leaf node
-	if ((*node).children.size() - 1 < 0)
-		return;
 	// Edit children for newNode and node
-	tempNum = (int)((*node).children.size() / 2);
-	for (int i=(*node).children.size() - 1; i>=tempNum; i--) {
-		(*newNode).children.insert((*newNode).children.begin(), (*node).children[i]);
-		(*newNode).children.erase((*newNode).children.begin() + i);
+	if ((*node).children.size() > 0) {
+		tempNum = (int)((*node).children.size() / 2);
+		for (int i=(*node).children.size() - 1; i>=tempNum; i--) {
+			(*newNode).children.insert((*newNode).children.begin(), (*node).children[i]);
+			(*(*newNode).children[0]).parent = newNode;
+			(*node).children.erase((*node).children.begin() + i);
+		}
+	}
+	// Remove the leftmost key from the newNode if it isnt a child
+	if (!(*newNode).is_leaf()) {
+		(*newNode).keys.erase((*newNode).keys.begin());
 	}
 	return;
 }
 
 template <class T>
 BPlusTree<T>::~BPlusTree() {
+	if (rootNode == NULL)
+		return;
 	DeleteNode(rootNode);
 	return;
 }
@@ -213,7 +245,7 @@ void BPlusTree<T>::DeleteNode(BPlusTreeNode<T>* node) {
 template <class T>
 BPlusTreeNode<T>* BPlusTree<T>::find(const T& key) {
 	if (rootNode == NULL)
-		return rootNode;
+		return NULL;
 	return find(key, rootNode);
 }
 template <class T>
@@ -231,12 +263,15 @@ BPlusTreeNode<T>* BPlusTree<T>::find(T key, BPlusTreeNode<T>* node) {
 
 template <class T>
 void BPlusTree<T>::print_sideways(std::ofstream& outfile) {
+	if (rootNode == NULL)
+		return;
 	print_sideways(0, rootNode, outfile);
 }
 template<class T>
 void BPlusTree<T>::print_sideways(short depth, BPlusTreeNode<T>* node, std::ofstream& outfile) {
 	if ((*node).is_leaf()) {
-		outfile << ('\t' * depth);
+		for (unsigned int i=0; i<(uint)depth; i++)
+			outfile << '\t';
 		for (unsigned int i=0; i<(*node).keys.size(); i++) {
 			outfile << (*node).keys[i];
 			if (i + 1 <(*node).keys.size())
@@ -246,11 +281,14 @@ void BPlusTree<T>::print_sideways(short depth, BPlusTreeNode<T>* node, std::ofst
 		for (unsigned int i=0; i<((*node).children.size()/2); i++) {
 			print_sideways(depth+1, (*node).children[i], outfile);
 		}
+		for (unsigned int i=0; i<(uint)depth; i++)
+			outfile << '\t';
 		for (unsigned int i=0; i<(*node).keys.size(); i++) {
 			outfile << (*node).keys[i];
 			if (i + 1 <(*node).keys.size())
 				outfile << ',';
 		}
+		outfile << std::endl;
 		for (unsigned int i=(int)((*node).children.size()/2); i<(*node).children.size(); i++) {
 			print_sideways(depth+1, (*node).children[i], outfile);
 		}
@@ -286,7 +324,7 @@ void BPlusTree<T>::print_BFS(short depth, short targetDepth, BPlusTreeNode<T>* n
 			if (i+1<(*node).keys.size())
 				outfile << ',';
 		}
-		outfile << ' ';
+		outfile << '\t';
 		return;
 	}
 	for (unsigned int i=0; i<(*node).children.size(); i++) {

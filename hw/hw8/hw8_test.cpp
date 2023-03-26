@@ -41,10 +41,8 @@ int main(int argc, char* argv[]){
 	RealTreeTestPrint(outfile);
 	outfile << "RealTreeTestPrint() complete!" << std::endl;
 
-	/*
-	ExtraCreditTest(outfile);
+	/* ExtraCreditTest(outfile); */
 	outfile << "ExtraCreditTest() complete!" << std::endl;
-	*/
 
 	return 0;
 }
@@ -165,7 +163,6 @@ void RealTreeTestPrint(std::ofstream& outfile){
 		b1.insert(i);
 		b2.insert(7-i);
 	}
-
 	b1.print_sideways(outfile);
 	outfile << std::endl;
 	b1.print_BFS(outfile);
@@ -176,25 +173,25 @@ void RealTreeTestPrint(std::ofstream& outfile){
 	outfile << std::endl;
 }
 
-void ExtraCreditTest(std::ofstream& outfile){
-	BPlusTree<int> b(3);
-	b.insert(10);
-	b.insert(32);
-	b.insert(43);
-	b.insert(40);
-	b.insert(37);
-	b.insert(16);
-	b.insert(25);
-	b.insert(23);
-	b.insert(7);
-	b.insert(1);
-	b.insert(39);
-	b.insert(28);
-	b.insert(45);
-	outfile << "=============" << std::endl;
-	b.print_sideways(outfile);
-	/* outfile << "============="; */
-	/* outfile << std::endl; */
-	/* b.print_BFS_pretty(outfile); */
-	/* outfile << std::endl; */
-}
+/* void ExtraCreditTest(std::ofstream& outfile){ */
+/* 	BPlusTree<int> b(3); */
+/* 	b.insert(10); */
+/* 	b.insert(32); */
+/* 	b.insert(43); */
+/* 	b.insert(40); */
+/* 	b.insert(37); */
+/* 	b.insert(16); */
+/* 	b.insert(25); */
+/* 	b.insert(23); */
+/* 	b.insert(7); */
+/* 	b.insert(1); */
+/* 	b.insert(39); */
+/* 	b.insert(28); */
+/* 	b.insert(45); */
+/* 	outfile << "=============" << std::endl; */
+/* 	b.print_sideways(outfile); */
+/* 	outfile << "============="; */
+/* 	outfile << std::endl; */
+/* 	b.print_BFS_pretty(outfile); */
+/* 	outfile << std::endl; */
+/* } */
