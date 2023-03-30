@@ -88,7 +88,7 @@ std::vector<std::string> Chessboard::CheckValidMoves() {
 								if ((k==0 && moveRight) || (k==1 && moveLeft) || (k==2 && moveDown) || (k==3 && moveUp))
 									canMove = true;
 								if ((pieceInQuestion.GetType() == '*' || pieceInQuestion.GetColor() != color) && canMove) {
-									std::string s({files[file], char(rank), ' ', files[j], char(8-i)});
+									std::string s({files[j], char(8-i), ' ' ,files[file], char(rank)});
 									possibleMoves.push_back(s);
 								} else {
 									if (k==0)
