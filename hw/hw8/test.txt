@@ -2,6 +2,8 @@ TemplateTest() complete!
 
 SmallTreeCopyTest() complete!
 
+Tree is empty.
+Tree is empty.
 EmptyTreeTest() complete!
 
 RealTreeTestNoPrint() complete!
@@ -9,27 +11,23 @@ RealTreeTestNoPrint() complete!
 		1
 	2
 		2
-
 3
 		3
 	4,5
 		4
 		5,6
 
-
-
-3	
-2	4,5	
-1	2	3	4	5,6	
+3
+2	4,5
+1	2	3	4	5,6
 
 	1,2
 3,5
 	3,4
 	5,6
 
-
-3,5	
-1,2	3,4	5,6	
+3,5
+1,2	3,4	5,6
 
 RealTreeTestPrint() complete!
 ExtraCreditTest() complete!
