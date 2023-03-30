@@ -54,63 +54,53 @@ std::vector<std::string> Chessboard::CheckValidMoves() {
 				// If it is any other piece of the right color
 			} else if ((color == 'W' && whiteToMove) || (color == 'B' && !whiteToMove)) {
 				if (type == 'R') {
+					bool moveLeft = true;
+					bool moveRight = true;
+					bool moveUp = true;
+					bool moveDown = true;
 					for (short k=0; k<4; k++) {
 						bool outOfBounds = false;
 						for (short l=1; l<8; l++) {
-							switch (k) {
-							case 0:
-								// out of bounds check
-								if (j+l > 7) {
-									outOfBounds = true;
-									break;
-								}
-								// If space is empty
-								if (data[i][j+l].GetType() == '*') {
-									std::string s({files[j+l], char(i), ' ', files[i], char(i)});
-									possibleMoves.push_back(s);
-								}
-								break;
-							case 1:
-								// out of bounds check
-								if (j-l < 0) {
-									outOfBounds = true;
-									break;
-								}
-								// If space is empty
-								if (data[i][j+l].GetType() == '*') {
-									std::string s({files[j], char(i), ' ', files[j+l], char(i)});
-									possibleMoves.push_back(s);
-								}
-								break;
-							case 2:
-								// out of bounds check
-								if (i+l > 7) {
-									outOfBounds = true;
-									break;
-								}
-								// If space is empty
-								if (data[i+l][j].GetType() == '*') {
-									std::string s({files[j], char(i), ' ', files[j+l], char(i)});
-									possibleMoves.push_back(s);
-								}
-								break;
-							case 3:
-								// out of bounds check
-								if (k-l < 0) {
-									outOfBounds = true;
-									break;
-								}
-								// If space is empty
-								if (data[i-l][j].GetType() == '*') {
-									std::string s({files[j], char(i), ' ', files[k-l], char(i)});
-									possibleMoves.push_back(s);
-								}
-								break;
-							default:
-								break;
+							if ((j+l>7 && k==0) || (j-l<0 && k==1) || (i+l>7 && k==2) || (k-l<0 && k==3)) {
+								outOfBounds = true;
+								continue;
 							}
-							if (outOfBounds)
-								break;
+							bool canMove = false;
+							Piece* pieceInQuestion;
+							short file = 0;
+							short rank = 0;
+							if (k==0) {
+								pieceInQuestion = data[i][j+l];
+								file = j+l;
+								rank = 8-i;
+							} else if (k==1) {
+								pieceInQuestion = data[i][j-l];
+								file = j-l;
+								rank = 8-i;
+							} else if (k==2) {
+								pieceInQuestion = data[i+l][j];
+								file = j;
+								rank = 8-i-l;
+							} else {
+								pieceInQuestion = data[i-l][j];
+								file = j;
+								rank = 8-i+l;
+								if ((k==0 && moveRight) || (k==1 && moveLeft) || (k==2 && moveDown) || (k==3 && moveUp))
+									canMove = true;
+								if ((pieceInQuestion.GetType() == '*' || pieceInQuestion.GetColor() != color) && canMove) {
+									std::string s({files[file], char(rank), ' ', files[j], char(8-i)});
+									possibleMoves.push_back(s);
+								} else {
+									if (k==0)
+										moveRight = false;
+									else if (k==1)
+										moveLeft = false;
+									else if (k==2)
+										moveDown = false;
+									else
+										moveUp = false;
+								}
+							}
 						}
 					}
 				}
