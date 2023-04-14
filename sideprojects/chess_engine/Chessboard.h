@@ -13,8 +13,8 @@ public:
 	std::vector<std::string> CheckValidMoves();
 	float EvaluatePosition();
 	void FlipMove() {whiteToMove = !whiteToMove;}
-	Piece** getBoard() {return data;}
+	std::vector<std::vector<Piece*>> getBoard() {return data;}
 private:
-	Piece** data;
+	std::vector<std::vector<Piece*>> data;
 	bool whiteToMove;
 };
