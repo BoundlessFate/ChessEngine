@@ -23,6 +23,7 @@ private:
 	std::vector<std::string> QueenMoves(short i, short j, char color, char type);
 	std::vector<std::string> KingMoves(short i, short j, char color, char type);
 	std::vector<std::string> KnightMoves(short i, short j, char color, char type);
+	std::vector<std::string> CastleMoves();
 	std::vector<std::vector<Piece*>> data;
 	bool whiteToMove;
 };

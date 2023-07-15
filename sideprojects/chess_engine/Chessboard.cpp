@@ -1,5 +1,6 @@
 #include "Chessboard.h"
 #include <iostream>
+#include <cassert>
 std::vector<char> files = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 std::vector<char> promotions = {'B', 'N', 'R', 'Q'};
 Chessboard::Chessboard(char a) {
@@ -10,7 +11,7 @@ Chessboard::Chessboard(char a) {
 			data[i].push_back(NULL);
 		}
 	}
-// Test Board 1
+	// Test Board 1
 	/* data[0][0] = new Piece('*', 'E'); */
 	/* data[0][1] = new Piece('R', 'B'); */
 	/* data[0][2] = new Piece('*', 'E'); */
@@ -76,7 +77,65 @@ Chessboard::Chessboard(char a) {
 	/* data[7][6] = new Piece('*', 'E'); */
 	/* data[7][7] = new Piece('*', 'E'); */
 
-// Standard Game
+	/* // Standard Game */
+	/* data[0][0] = new Piece('R', 'B'); */
+	/* data[0][1] = new Piece('N', 'B'); */
+	/* data[0][2] = new Piece('B', 'B'); */
+	/* data[0][3] = new Piece('Q', 'B'); */
+	/* data[0][4] = new Piece('K', 'B'); */
+	/* data[0][5] = new Piece('B', 'B'); */
+	/* data[0][6] = new Piece('N', 'B'); */
+	/* data[0][7] = new Piece('R', 'B'); */
+	/* for (unsigned int i=0; i<8; i++) { */
+	/* 	data[1][i] = new Piece('P', 'B'); */
+	/* } */
+	/* for (unsigned int i=2; i<6; i++) { */
+	/* 	for (unsigned int j=0; j<8; j++) { */
+	/* 		data[i][j] = new Piece('*', 'E'); */
+	/* 	} */
+	/* } */
+	/* for (unsigned int i=0; i<8; i++) { */
+	/* 	data[6][i] = new Piece('P', 'W'); */
+	/* } */
+	/* data[7][0] = new Piece('R', 'W'); */
+	/* data[7][1] = new Piece('N', 'W'); */
+	/* data[7][2] = new Piece('B', 'W'); */
+	/* data[7][3] = new Piece('Q', 'W'); */
+	/* data[7][4] = new Piece('K', 'W'); */
+	/* data[7][5] = new Piece('B', 'W'); */
+	/* data[7][6] = new Piece('N', 'W'); */
+	/* data[7][7] = new Piece('R', 'W'); */
+
+	// Castle Board
+	/* data[0][0] = new Piece('R', 'B'); */
+	/* data[0][1] = new Piece('N', 'B'); */
+	/* data[0][2] = new Piece('B', 'B'); */
+	/* data[0][3] = new Piece('Q', 'B'); */
+	/* data[0][4] = new Piece('K', 'B'); */
+	/* data[0][5] = new Piece('B', 'B'); */
+	/* data[0][6] = new Piece('N', 'B'); */
+	/* data[0][7] = new Piece('R', 'B'); */
+	/* for (unsigned int i=0; i<8; i++) { */
+	/* 	data[1][i] = new Piece('P', 'B'); */
+	/* } */
+	/* for (unsigned int i=2; i<6; i++) { */
+	/* 	for (unsigned int j=0; j<8; j++) { */
+	/* 		data[i][j] = new Piece('*', 'E'); */
+	/* 	} */
+	/* } */
+	/* for (unsigned int i=0; i<8; i++) { */
+	/* 	data[6][i] = new Piece('P', 'W'); */
+	/* } */
+	/* data[7][0] = new Piece('R', 'W'); */
+	/* data[7][1] = new Piece('*', 'E'); */
+	/* data[7][2] = new Piece('*', 'E'); */
+	/* data[7][3] = new Piece('*', 'E'); */
+	/* data[7][4] = new Piece('K', 'W'); */
+	/* data[7][5] = new Piece('*', 'E'); */
+	/* data[7][6] = new Piece('*', 'E'); */
+	/* data[7][7] = new Piece('R', 'W'); */
+
+	// Castle Through Check Board
 	data[0][0] = new Piece('R', 'B');
 	data[0][1] = new Piece('N', 'B');
 	data[0][2] = new Piece('B', 'B');
@@ -85,48 +144,43 @@ Chessboard::Chessboard(char a) {
 	data[0][5] = new Piece('B', 'B');
 	data[0][6] = new Piece('N', 'B');
 	data[0][7] = new Piece('R', 'B');
-	for (unsigned int i=0; i<8; i++) {
-		data[1][i] = new Piece('P', 'B');
-	}
-	for (unsigned int i=2; i<6; i++) {
+	for (unsigned int i=1; i<7; i++) {
 		for (unsigned int j=0; j<8; j++) {
 			data[i][j] = new Piece('*', 'E');
 		}
 	}
-	for (unsigned int i=0; i<8; i++) {
-		data[6][i] = new Piece('P', 'W');
-	}
 	data[7][0] = new Piece('R', 'W');
-	data[7][1] = new Piece('N', 'W');
-	data[7][2] = new Piece('B', 'W');
-	data[7][3] = new Piece('Q', 'W');
+	data[7][1] = new Piece('*', 'E');
+	data[7][2] = new Piece('*', 'E');
+	data[7][3] = new Piece('*', 'E');
 	data[7][4] = new Piece('K', 'W');
-	data[7][5] = new Piece('B', 'W');
-	data[7][6] = new Piece('N', 'W');
+	data[7][5] = new Piece('*', 'E');
+	data[7][6] = new Piece('*', 'E');
 	data[7][7] = new Piece('R', 'W');
 
-// Checkmate test
-/* 	for (unsigned int i=0; i<6; i++) { */
-/* 		for (unsigned int j=0; j<8; j++) { */
-/* 			data[i][j] = new Piece('*', 'E'); */
-/* 		} */
-/* 	} */
-/* 	data[6][0] = new Piece('R', 'B'); */
-/* 	data[6][1] = new Piece('*', 'E'); */
-/* 	data[6][2] = new Piece('*', 'E'); */
-/* 	data[6][3] = new Piece('*', 'E'); */
-/* 	data[6][4] = new Piece('*', 'E'); */
-/* 	data[6][5] = new Piece('*', 'E'); */
-/* 	data[6][6] = new Piece('*', 'E'); */
-/* 	data[6][7] = new Piece('*', 'E'); */
-/* 	data[7][0] = new Piece('R', 'B'); */
-/* 	data[7][1] = new Piece('*', 'E'); */
-/* 	data[7][2] = new Piece('*', 'E'); */
-/* 	data[7][3] = new Piece('*', 'E'); */
-/* 	data[7][4] = new Piece('K', 'W'); */
-/* 	data[7][5] = new Piece('*', 'E'); */
-/* 	data[7][6] = new Piece('*', 'E'); */
-/* 	data[7][7] = new Piece('*', 'E'); */
+
+	// Checkmate test
+	/* for (unsigned int i=0; i<6; i++) { */
+	/* 	for (unsigned int j=0; j<8; j++) { */
+	/* 		data[i][j] = new Piece('*', 'E'); */
+	/* 	} */
+	/* } */
+	/* data[6][0] = new Piece('R', 'B'); */
+	/* data[6][1] = new Piece('*', 'E'); */
+	/* data[6][2] = new Piece('*', 'E'); */
+	/* data[6][3] = new Piece('*', 'E'); */
+	/* data[6][4] = new Piece('*', 'E'); */
+	/* data[6][5] = new Piece('*', 'E'); */
+	/* data[6][6] = new Piece('*', 'E'); */
+	/* data[6][7] = new Piece('*', 'E'); */
+	/* data[7][0] = new Piece('R', 'B'); */
+	/* data[7][1] = new Piece('*', 'E'); */
+	/* data[7][2] = new Piece('*', 'E'); */
+	/* data[7][3] = new Piece('*', 'E'); */
+	/* data[7][4] = new Piece('K', 'W'); */
+	/* data[7][5] = new Piece('*', 'E'); */
+	/* data[7][6] = new Piece('*', 'E'); */
+	/* data[7][7] = new Piece('K', 'B'); */
 
 }
 Chessboard::Chessboard(Chessboard& a) {
@@ -142,6 +196,8 @@ Chessboard::Chessboard(Chessboard& a) {
 			data[i][j] = new Piece(oldBoard[i][j]->GetType(), oldBoard[i][j]->GetColor());
 		}
 	}
+	assert(data.size() == 8);
+	assert(data[0].size() == 8);
 }
 Chessboard::~Chessboard() {
 	for (unsigned int i=0; i<8; i++) {
@@ -170,7 +226,8 @@ std::vector<std::string> Chessboard::PawnMoves(std::string lastMove, short i, sh
 		else {
 			// Checking for promotions when moving up
 			for (short k=0; k<3; k++)
-				possibleMoves.push_back({type, files[j], std::to_string(8-i)[0], ' ', files[j], std::to_string(8-i+movementMultiplier)[0], '=', promotions[k]});
+				possibleMoves.push_back({type, files[j], std::to_string(8-i)[0], ' ', files[j], 
+						std::to_string(8-i+movementMultiplier)[0], '=', promotions[k]});
 		}
 	}
 	// Taking on the sides
@@ -181,14 +238,7 @@ std::vector<std::string> Chessboard::PawnMoves(std::string lastMove, short i, sh
 			if (0 < i-movementMultiplier && i-movementMultiplier < 7)
 				possibleMoves.push_back({type, files[j], std::to_string(8-i)[0], ' ', 'x', files[j+k], std::to_string(8-i+movementMultiplier)[0]});
 			// If you can promote
-			else {	data[6][0] = new Piece('R', 'B');
-	data[6][1] = new Piece('N', 'B');
-	data[6][2] = new Piece('B', 'B');
-	data[6][3] = new Piece('Q', 'B');
-	data[6][4] = new Piece('K', 'B');
-	data[6][5] = new Piece('B', 'B');
-	data[6][6] = new Piece('N', 'B');
-	data[6][7] = new Piece('R', 'B');
+			else {	
 				for (short l=0; l<3; l++)
 					possibleMoves.push_back({type, files[j], std::to_string(8-i)[0], ' ', 'x', files[j+k], std::to_string(8-i+movementMultiplier)[0], '=', promotions[l]});
 			}
@@ -453,6 +503,35 @@ std::vector<std::string> Chessboard::KnightMoves(short i, short j, char color, c
 
 	return possibleMoves;
 }
+
+std::vector<std::string> Chessboard::CastleMoves() {	
+	std::vector<std::string> possibleMoves;
+	if (whiteToMove) {
+		if (data[7][0]->GetType() == 'R' && data[7][1]->GetType() == '*' && data[7][2]->GetType() == '*'
+				&& data[7][3]->GetType() == '*' && data[7][4]->GetType() == 'K'
+				&& !data[7][0]->HasMoved() && !data[7][4]->HasMoved()) {
+			possibleMoves.push_back("O-O-O");
+		}
+		if (data[7][7]->GetType() == 'R' && data[7][6]->GetType() == '*' && data[7][5]->GetType() == '*'
+				&& data[7][4]->GetType() == 'K'
+				&& !data[7][7]->HasMoved() && !data[7][4]->HasMoved()) {
+			possibleMoves.push_back("O-O");
+		}
+	} else {
+		if (data[0][0]->GetType() == 'R' && data[0][1]->GetType() == '*' && data[0][2]->GetType() == '*'
+				&& data[0][3]->GetType() == '*' && data[0][4]->GetType() == 'K'
+				&& !data[0][0]->HasMoved() && !data[0][4]->HasMoved()) {
+			possibleMoves.push_back("O-O-O");
+		}
+		if (data[0][7]->GetType() == 'R' && data[0][6]->GetType() == '*' && data[0][5]->GetType() == '*'
+				&& data[0][4]->GetType() == 'K'
+				&& !data[0][7]->HasMoved() && !data[0][4]->HasMoved()) {
+			possibleMoves.push_back("O-O");
+		}
+	}
+	return possibleMoves;
+}
+
 std::vector<std::string> Chessboard::CheckValidMoves(std::string lastMove) {
 	std::vector<std::string> possibleMoves;
 	std::vector<std::string> tempMoves;
@@ -495,9 +574,58 @@ std::vector<std::string> Chessboard::CheckValidMoves(std::string lastMove) {
 			}
 		}
 	}
+	tempMoves = CastleMoves();
+	for (unsigned int k=0; k<tempMoves.size(); k++)
+		possibleMoves.push_back(tempMoves[k]);
 	return possibleMoves;
 }
+
 void Chessboard::ProcessMove(std::string& move) {
+	int castleNum = 7;
+	if (!whiteToMove)
+		castleNum = 0;
+	if (move == "O-O") {
+		Piece* king = data[castleNum][4];
+		Piece* rook = data[castleNum][7];
+		data[castleNum][4] = new Piece('*','E');
+		data[castleNum][7] = new Piece('*', 'E');
+		Piece* emptyKingSquare = data[castleNum][6];
+		Piece* emptyRookSquare = data[castleNum][5];
+		data[castleNum][6] = king;
+		data[castleNum][5] = rook;
+		delete emptyKingSquare;
+		delete emptyRookSquare;
+		king->Move();
+		rook->Move();
+		return;
+	} else if (move == "O-O-O") {
+		Piece* king = data[castleNum][4];
+		Piece* rook = data[castleNum][0];
+		data[castleNum][4] = new Piece('*','E');
+		data[castleNum][0] = new Piece('*', 'E');
+		Piece* emptyKingSquare = data[castleNum][2];
+		Piece* emptyRookSquare = data[castleNum][3];
+		data[castleNum][2] = king;
+		data[castleNum][3] = rook;
+		delete emptyKingSquare;
+		delete emptyRookSquare;
+		king->Move();
+		rook->Move();
+		return;
+	} else if (move == "O-O-O") {
+		Piece* king = data[castleNum][4];
+		Piece* rook = data[castleNum][0];
+		data[castleNum][4] = new Piece('*','E');
+		data[castleNum][0] = new Piece('*', 'E');
+		Piece* emptyKingSquare = data[castleNum][2];
+		Piece* emptyRookSquare = data[castleNum][3];
+		data[castleNum][2] = king;
+		data[castleNum][3] = rook;
+		delete emptyKingSquare;
+		delete emptyRookSquare;
+		return;
+	}
+
 	int originalFile = -1;
 	int originalRank = move[2] - '0';
 	for(unsigned int i=0; i<files.size(); i++) {
@@ -523,9 +651,11 @@ void Chessboard::ProcessMove(std::string& move) {
 		Piece* oldPiece = data[8-finalRank][finalFile];
 		data[8-finalRank][finalFile] = originalPiece;
 		delete oldPiece;
-	// If you need to promote the piece
+		originalPiece->Move();
+		// If you need to promote the piece
 	} else {
 		Piece* newPiece = new Piece(move[move.size()-1], originalPiece->GetColor());
+		data[8-originalRank][originalFile] = new Piece('*','E');
 		delete originalPiece;
 		int finalRank = move[move.size()-3] - '0';
 		for(unsigned int i=0; i<files.size(); i++) {
@@ -538,6 +668,7 @@ void Chessboard::ProcessMove(std::string& move) {
 		Piece* oldPiece = data[8-finalRank][finalFile];
 		data[8-finalRank][finalFile] = newPiece;
 		delete oldPiece;
+		newPiece->Move();
 	}
 	return;
 }

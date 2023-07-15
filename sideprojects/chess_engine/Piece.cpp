@@ -2,4 +2,5 @@
 Piece::Piece(char aType, char aColor) {
 	type = aType;
 	color = aColor;
+	moved = false;
 }
