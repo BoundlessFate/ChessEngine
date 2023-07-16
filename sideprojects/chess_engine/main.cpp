@@ -32,19 +32,27 @@ std::vector<std::string> PinsAndChecks(std::vector<std::string> allMoves, Chessb
 			}
 			assert(file != '*');
 			bool boardSide = newBoard.GetMove();
+			std::cout << newBoard.GetMove() << std::endl;
 			newBoard.FlipMove();
+			std::cout << newBoard.GetMove() << std::endl;
 			assert(boardSide != newBoard.GetMove());
+			std::cout << "-----" << std::endl;
 			std::vector<std::string> opponentMoves = newBoard.CheckValidMoves(allMoves[i]);
 			assert(opponentMoves.size() != 0);
 			bool badMoveFound = false;
 			char rankChar = '0' + char(rank);
+			std::cout << file << rankChar << std::endl;
 			for (unsigned int j=0; j<opponentMoves.size(); j++) {
+				if (opponentMoves[j].find("x") != std::string::npos)
+					std::cout << opponentMoves[j] << std::endl;
 				// If illegal move found
-				if (opponentMoves[j][opponentMoves[j].size()-2] == file && opponentMoves[j][opponentMoves[j].size()-1] == rankChar) {
+				if ((opponentMoves[j][opponentMoves[j].size()-2] == file && opponentMoves[j][opponentMoves[j].size()-1] == rankChar) ||
+						(opponentMoves[j][opponentMoves[j].size()-4] == file && opponentMoves[j][opponentMoves[j].size()-3] == rankChar)) {
 					badMoveFound = true;
 					break;
 				}
 			}
+			std::cout << "-----" << std::endl;
 			if (!badMoveFound)
 				trueMoves.push_back(allMoves[i]);
 			// Try all the moves that are moving through check
@@ -75,7 +83,8 @@ std::vector<std::string> PinsAndChecks(std::vector<std::string> allMoves, Chessb
 				assert(opponentMoves.size() != 0);
 				for (unsigned int k=0; k<opponentMoves.size(); k++) {
 					// If illegal move found
-					if (opponentMoves[k][opponentMoves[k].size()-2] == file && opponentMoves[k][opponentMoves[k].size()-1] == rank) {
+					if ((opponentMoves[k][opponentMoves[k].size()-2] == file && opponentMoves[k][opponentMoves[k].size()-1] == rank) ||
+							(opponentMoves[k][opponentMoves[k].size()-4] == file && opponentMoves[k][opponentMoves[k].size()-3] == rank)) {
 						castleWorks = false;
 						break;
 					}
@@ -162,12 +171,12 @@ int main(int argc, char** argv) {
 			} else {
 				std::vector<std::string> allMoves = board.CheckValidMoves(lastMove);
 				allMoves = PinsAndChecks(allMoves, board);
-				/* std::cout << "*****" << std::endl; */
-				/* std::cout << "ALL VALID PLAYER MOVES" << std::endl; */
-				/* for (unsigned int i=0; i< allMoves.size(); i++) { */
-				/* 	std::cout << allMoves[i] << std::endl; */
-				/* } */
-				/* std::cout << "*****" << std::endl; */
+				std::cout << "*****" << std::endl;
+				std::cout << "ALL VALID PLAYER MOVES" << std::endl;
+				for (unsigned int i=0; i< allMoves.size(); i++) {
+					std::cout << allMoves[i] << std::endl;
+				}
+				std::cout << "*****" << std::endl;
 				if (allMoves.size() == 0 || stalemateCounter >= 100) {
 					gameEnd = true;
 					if (stalemateCounter < 100 && CheckmateCheck(board, lastMove))
