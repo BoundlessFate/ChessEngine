@@ -1,9 +1,9 @@
 #include <iostream>
-#include "Chessboard.cpp"
 #include <stdlib.h>
 #include <time.h>
 #include <climits>
 #include <cassert>
+#include "Engine.cpp"
 std::vector<std::string> PinsAndChecks(std::vector<std::string> allMoves, Chessboard& board) {
 	std::vector<std::string> trueMoves;
 	assert(allMoves.size() != 0);
@@ -135,6 +135,7 @@ int main(int argc, char** argv) {
 		int stalemateCounter = 0;
 		while (!gameEnd) {
 			board.DisplayBoard();
+			std::cout << "Eval: " << EvaluatePosition(board) << std::endl;
 			// If it is the computers turn
 			if ((board.GetMove() && argv[1][0] == 'W') || (!board.GetMove() && argv[1][0] == 'B')) {
 				// Computer Move
@@ -155,10 +156,10 @@ int main(int argc, char** argv) {
 					std::cout << allMoves[i] << std::endl;
 				}
 				std::cout << "*****" << std::endl;
-				int moveNum = rand() % allMoves.size();
-				board.ProcessMove(allMoves[moveNum]);
-				lastMove = allMoves[moveNum];
-				std::cout << allMoves[moveNum] << std::endl;
+				std::string computerMove = FindBestMove(board, allMoves);
+				board.ProcessMove(computerMove);
+				lastMove = computerMove;
+				std::cout << computerMove << std::endl;
 				board.FlipMove();
 				std::cout << "--------------------------" << std::endl;
 				// Players Turn
@@ -186,7 +187,7 @@ int main(int argc, char** argv) {
 					// For human play
 					getline(std::cin,inMove);
 					// For bot on bot play
-					/* inMove = allMoves[rand() % allMoves.size()]; */
+					/* inMove = FindBestMove(board, allMoves); */
 					std::cout << inMove << std::endl;
 					bool found = false;
 					for (unsigned int i=0; i<allMoves.size(); i++) {
@@ -203,8 +204,8 @@ int main(int argc, char** argv) {
 				lastMove = inMove;
 				board.FlipMove();
 				// If the board should be cleared
-				/* std::cout << std::flush; */
-				/* system("clear"); */
+				std::cout << std::flush;
+				system("clear");
 			}
 			stalemateCounter += 1;
 			if (lastMove[lastMove.size() - 3] == 'x')
