@@ -77,34 +77,34 @@ Chessboard::Chessboard(char a) {
 	/* data[7][6] = new Piece('*', 'E'); */
 	/* data[7][7] = new Piece('*', 'E'); */
 
-	/* // Standard Game */
-	/* data[0][0] = new Piece('R', 'B'); */
-	/* data[0][1] = new Piece('N', 'B'); */
-	/* data[0][2] = new Piece('B', 'B'); */
-	/* data[0][3] = new Piece('Q', 'B'); */
-	/* data[0][4] = new Piece('K', 'B'); */
-	/* data[0][5] = new Piece('B', 'B'); */
-	/* data[0][6] = new Piece('N', 'B'); */
-	/* data[0][7] = new Piece('R', 'B'); */
-	/* for (unsigned int i=0; i<8; i++) { */
-	/* 	data[1][i] = new Piece('P', 'B'); */
-	/* } */
-	/* for (unsigned int i=2; i<6; i++) { */
-	/* 	for (unsigned int j=0; j<8; j++) { */
-	/* 		data[i][j] = new Piece('*', 'E'); */
-	/* 	} */
-	/* } */
-	/* for (unsigned int i=0; i<8; i++) { */
-	/* 	data[6][i] = new Piece('P', 'W'); */
-	/* } */
-	/* data[7][0] = new Piece('R', 'W'); */
-	/* data[7][1] = new Piece('N', 'W'); */
-	/* data[7][2] = new Piece('B', 'W'); */
-	/* data[7][3] = new Piece('Q', 'W'); */
-	/* data[7][4] = new Piece('K', 'W'); */
-	/* data[7][5] = new Piece('B', 'W'); */
-	/* data[7][6] = new Piece('N', 'W'); */
-	/* data[7][7] = new Piece('R', 'W'); */
+	// Standard Game
+	data[0][0] = new Piece('R', 'B');
+	data[0][1] = new Piece('N', 'B');
+	data[0][2] = new Piece('B', 'B');
+	data[0][3] = new Piece('Q', 'B');
+	data[0][4] = new Piece('K', 'B');
+	data[0][5] = new Piece('B', 'B');
+	data[0][6] = new Piece('N', 'B');
+	data[0][7] = new Piece('R', 'B');
+	for (unsigned int i=0; i<8; i++) {
+		data[1][i] = new Piece('P', 'B');
+	}
+	for (unsigned int i=2; i<6; i++) {
+		for (unsigned int j=0; j<8; j++) {
+			data[i][j] = new Piece('*', 'E');
+		}
+	}
+	for (unsigned int i=0; i<8; i++) {
+		data[6][i] = new Piece('P', 'W');
+	}
+	data[7][0] = new Piece('R', 'W');
+	data[7][1] = new Piece('N', 'W');
+	data[7][2] = new Piece('B', 'W');
+	data[7][3] = new Piece('Q', 'W');
+	data[7][4] = new Piece('K', 'W');
+	data[7][5] = new Piece('B', 'W');
+	data[7][6] = new Piece('N', 'W');
+	data[7][7] = new Piece('R', 'W');
 
 	// Castle Board
 	/* data[0][0] = new Piece('R', 'B'); */
@@ -136,27 +136,27 @@ Chessboard::Chessboard(char a) {
 	/* data[7][7] = new Piece('R', 'W'); */
 
 	// Castle Through Check Board
-	data[0][0] = new Piece('R', 'B');
-	data[0][1] = new Piece('N', 'B');
-	data[0][2] = new Piece('B', 'B');
-	data[0][3] = new Piece('Q', 'B');
-	data[0][4] = new Piece('K', 'B');
-	data[0][5] = new Piece('B', 'B');
-	data[0][6] = new Piece('N', 'B');
-	data[0][7] = new Piece('R', 'B');
-	for (unsigned int i=1; i<7; i++) {
-		for (unsigned int j=0; j<8; j++) {
-			data[i][j] = new Piece('*', 'E');
-		}
-	}
-	data[7][0] = new Piece('R', 'W');
-	data[7][1] = new Piece('*', 'E');
-	data[7][2] = new Piece('*', 'E');
-	data[7][3] = new Piece('*', 'E');
-	data[7][4] = new Piece('K', 'W');
-	data[7][5] = new Piece('*', 'E');
-	data[7][6] = new Piece('*', 'E');
-	data[7][7] = new Piece('R', 'W');
+	/* data[0][0] = new Piece('R', 'B'); */
+	/* data[0][1] = new Piece('N', 'B'); */
+	/* data[0][2] = new Piece('B', 'B'); */
+	/* data[0][3] = new Piece('Q', 'B'); */
+	/* data[0][4] = new Piece('K', 'B'); */
+	/* data[0][5] = new Piece('B', 'B'); */
+	/* data[0][6] = new Piece('N', 'B'); */
+	/* data[0][7] = new Piece('R', 'B'); */
+	/* for (unsigned int i=1; i<7; i++) { */
+	/* 	for (unsigned int j=0; j<8; j++) { */
+	/* 		data[i][j] = new Piece('*', 'E'); */
+	/* 	} */
+	/* } */
+	/* data[7][0] = new Piece('R', 'W'); */
+	/* data[7][1] = new Piece('*', 'E'); */
+	/* data[7][2] = new Piece('*', 'E'); */
+	/* data[7][3] = new Piece('*', 'E'); */
+	/* data[7][4] = new Piece('K', 'W'); */
+	/* data[7][5] = new Piece('*', 'E'); */
+	/* data[7][6] = new Piece('*', 'E'); */
+	/* data[7][7] = new Piece('R', 'W'); */
 
 
 	// Checkmate test
@@ -184,18 +184,22 @@ Chessboard::Chessboard(char a) {
 
 }
 Chessboard::Chessboard(Chessboard& a) {
+	// Creates blank board of NULL objects
 	for (unsigned int i=0; i<8; i++) {
 		data.push_back(std::vector<Piece*>());
 		for (unsigned int j=0; j<8; j++) {
 			data[i].push_back(NULL);
 		}
 	}
-	std::vector<std::vector<Piece*>> oldBoard = a.getBoard();
+	// Get reference to old board
+	std::vector<std::vector<Piece*>> oldBoard = a.GetBoard();
+	// Set the pieces to the original positions
 	for (unsigned int i=0; i<8; i++) {
 		for (unsigned int j=0; j<8; j++) {
 			data[i][j] = new Piece(oldBoard[i][j]->GetType(), oldBoard[i][j]->GetColor());
 		}
 	}
+	whiteToMove = a.GetMove();
 	assert(data.size() == 8);
 	assert(data[0].size() == 8);
 }
@@ -509,23 +513,27 @@ std::vector<std::string> Chessboard::CastleMoves() {
 	if (whiteToMove) {
 		if (data[7][0]->GetType() == 'R' && data[7][1]->GetType() == '*' && data[7][2]->GetType() == '*'
 				&& data[7][3]->GetType() == '*' && data[7][4]->GetType() == 'K'
-				&& !data[7][0]->HasMoved() && !data[7][4]->HasMoved()) {
+				&& !data[7][0]->HasMoved() && !data[7][4]->HasMoved() && 
+				data[7][0]->GetColor() == 'W' && data[7][4]->GetColor() == 'W') {
 			possibleMoves.push_back("O-O-O");
 		}
 		if (data[7][7]->GetType() == 'R' && data[7][6]->GetType() == '*' && data[7][5]->GetType() == '*'
 				&& data[7][4]->GetType() == 'K'
-				&& !data[7][7]->HasMoved() && !data[7][4]->HasMoved()) {
+				&& !data[7][7]->HasMoved() && !data[7][4]->HasMoved() &&
+				data[7][7]->GetColor() == 'W' && data[7][4]->GetColor() == 'W') {
 			possibleMoves.push_back("O-O");
 		}
 	} else {
 		if (data[0][0]->GetType() == 'R' && data[0][1]->GetType() == '*' && data[0][2]->GetType() == '*'
 				&& data[0][3]->GetType() == '*' && data[0][4]->GetType() == 'K'
-				&& !data[0][0]->HasMoved() && !data[0][4]->HasMoved()) {
+				&& !data[0][0]->HasMoved() && !data[0][4]->HasMoved() &&
+				data[0][0]->GetColor() == 'B' && data[0][4]->GetColor() == 'B') {
 			possibleMoves.push_back("O-O-O");
 		}
 		if (data[0][7]->GetType() == 'R' && data[0][6]->GetType() == '*' && data[0][5]->GetType() == '*'
 				&& data[0][4]->GetType() == 'K'
-				&& !data[0][7]->HasMoved() && !data[0][4]->HasMoved()) {
+				&& !data[0][7]->HasMoved() && !data[0][4]->HasMoved() && 
+				data[0][7]->GetColor() == 'B' && data[0][4]->GetColor() == 'B') {
 			possibleMoves.push_back("O-O");
 		}
 	}

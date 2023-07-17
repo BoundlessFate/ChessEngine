@@ -32,27 +32,21 @@ std::vector<std::string> PinsAndChecks(std::vector<std::string> allMoves, Chessb
 			}
 			assert(file != '*');
 			bool boardSide = newBoard.GetMove();
-			std::cout << newBoard.GetMove() << std::endl;
 			newBoard.FlipMove();
-			std::cout << newBoard.GetMove() << std::endl;
 			assert(boardSide != newBoard.GetMove());
-			std::cout << "-----" << std::endl;
 			std::vector<std::string> opponentMoves = newBoard.CheckValidMoves(allMoves[i]);
 			assert(opponentMoves.size() != 0);
 			bool badMoveFound = false;
 			char rankChar = '0' + char(rank);
-			std::cout << file << rankChar << std::endl;
 			for (unsigned int j=0; j<opponentMoves.size(); j++) {
 				if (opponentMoves[j].find("x") != std::string::npos)
-					std::cout << opponentMoves[j] << std::endl;
-				// If illegal move found
-				if ((opponentMoves[j][opponentMoves[j].size()-2] == file && opponentMoves[j][opponentMoves[j].size()-1] == rankChar) ||
-						(opponentMoves[j][opponentMoves[j].size()-4] == file && opponentMoves[j][opponentMoves[j].size()-3] == rankChar)) {
-					badMoveFound = true;
-					break;
-				}
+					// If illegal move found
+					if ((opponentMoves[j][opponentMoves[j].size()-2] == file && opponentMoves[j][opponentMoves[j].size()-1] == rankChar) ||
+							(opponentMoves[j][opponentMoves[j].size()-4] == file && opponentMoves[j][opponentMoves[j].size()-3] == rankChar)) {
+						badMoveFound = true;
+						break;
+					}
 			}
-			std::cout << "-----" << std::endl;
 			if (!badMoveFound)
 				trueMoves.push_back(allMoves[i]);
 			// Try all the moves that are moving through check
@@ -173,9 +167,8 @@ int main(int argc, char** argv) {
 				allMoves = PinsAndChecks(allMoves, board);
 				std::cout << "*****" << std::endl;
 				std::cout << "ALL VALID PLAYER MOVES" << std::endl;
-				for (unsigned int i=0; i< allMoves.size(); i++) {
+				for (unsigned int i=0; i< allMoves.size(); i++)
 					std::cout << allMoves[i] << std::endl;
-				}
 				std::cout << "*****" << std::endl;
 				if (allMoves.size() == 0 || stalemateCounter >= 100) {
 					gameEnd = true;
@@ -190,9 +183,10 @@ int main(int argc, char** argv) {
 					std::cout << "Enter Move. Format goes like Pe2 e4," << std::endl;
 					std::cout << "Where it is the starting square to the final square." << std::endl;
 					std::cout << "Move: ";
-
+					// For human play
 					getline(std::cin,inMove);
-					inMove = allMoves[rand() % allMoves.size()];
+					// For bot on bot play
+					/* inMove = allMoves[rand() % allMoves.size()]; */
 					std::cout << inMove << std::endl;
 					bool found = false;
 					for (unsigned int i=0; i<allMoves.size(); i++) {
@@ -208,6 +202,7 @@ int main(int argc, char** argv) {
 				board.ProcessMove(inMove);
 				lastMove = inMove;
 				board.FlipMove();
+				// If the board should be cleared
 				/* std::cout << std::flush; */
 				/* system("clear"); */
 			}
