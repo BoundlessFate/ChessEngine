@@ -1,3 +1,0 @@
-C0001 rent 0001 1 T0001 Emma_Watson
-C0002 rent 0002 2 T0002 Yogi_Berra
-C0002 return 0003 1 T0002 Yogi_Berra
