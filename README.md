@@ -13,6 +13,7 @@ Something like './main.out W 3' would work
 3. The bot will make and display its moves on the board automatically
 
 4. When it is the players turn, Input moves by typing the symbol for the piece [P/B/R/N/K/Q], the starting square, a space, and the ending square
+
 	'Pe2 e4', 'Qa1 a8', etc.
 
 4a. If taking a piece, place the letter 'x' before the ending square
