@@ -8,7 +8,9 @@ How to use:
 
 	Search Depth [any integer]
 
-Something like './main.out W 3' would work
+	KEEP SEARCH DEPTH WITHIN REASON!!! IT WORKS in O(c^n) time (approx O(22^n) on average), so it can get out of control very very quickly!
+
+Something like './main.out W 3' would work. 
 
 3. The bot will make and display its moves on the board automatically
 
